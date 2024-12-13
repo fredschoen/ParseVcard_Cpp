@@ -33,28 +33,35 @@ string sN1="";
 string sN2="";
 string sN3="";
 string sN4="";
-string sNM="";
+
 string sTC="";
 string sTH="";
 string sTW="";
-string sE1="";
-string sE2="";
-string sE3="";
+string sEH="";
+string sEW="";
 
 string sO1="";
 string sO2="";
 string sO3="";
 
-string sA1="";
-string sA2="";
-string sA3="";
-string sA4="";
-string sA5="";
-string sA6="";
-string sA7="";
+string sAH1="";
+string sAH2="";
+string sAH3="";
+string sAH4="";
+string sAH5="";
+string sAH6="";
+string sAH7="";
 
-string sNT="";
+string sAW1="";
+string sAW2="";
+string sAW3="";
+string sAW4="";
+string sAW5="";
+string sAW6="";
+string sAW7="";
+
 string sTI="";
+string sNT="";
 
 string nomFicEntree="";
 string nomFicSortie="";
@@ -289,7 +296,10 @@ void fDecouperLigneVcf(string ligne) {
 
 	// cas bizarres
 	ligne =fTranscoderDebutLigne(ligne, "ADR;HOME;", "ADR;HOME:");
+	ligne =fTranscoderDebutLigne(ligne, "ADR;WORK;", "ADR;WORK:");
 	ligne =fTranscoderDebutLigne(ligne, "NOTE;", "NOTE:");
+	ligne =fTranscoderDebutLigne(ligne, "TITLE;", "TITLE:");
+	ligne =fTranscoderDebutLigne(ligne, "N;", "N:");
 
 	// decoupage de la ligne: �l�ment 1
 	pos = ligne.find(separAttributValeur);
@@ -324,30 +334,45 @@ void fDecouperLigneVcf(string ligne) {
 		sN2=valeur2;
 		sN3=valeur3;
 		sN4=valeur4;
+
 	} else if (attribut1.compare("TEL")==0){
 		if (attribut2.compare("CELL")==0){
 		       sTC=tabValeur;
 	    } else if (attribut2.compare("HOME")==0){
 	    	   sTH=tabValeur;
 	    } else sTW=tabValeur;
+
 	} else if (attribut1.compare("EMAIL")==0){
-		if (sE1==""){
-		       sE1=tabValeur;
-	    } else if (sE2==""){
-	    	   sE2=tabValeur;
-	    } else sE3=tabValeur;
+		if (attribut2.compare("HOME")==0){
+		       sEH=tabValeur;
+	    } else if (attribut2.compare("WORK")==0){
+	    	   sEW=tabValeur;
+	    } 
+
 	} else if (attribut1.compare("ADR")==0){
 
 		if (attribut2.compare("HOME")==0){
-			sA1=valeur1;
-			sA2=valeur2;
-			sA3=valeur3;
-			sA4=valeur4;
-			sA5=valeur5;
+			sAH1=valeur1;
+			sAH2=valeur2;
+			sAH3=valeur3;
+			sAH4=valeur4;
+			sAH5=valeur5;
 			if (valeur6.length()>0) {
-			sA6="'"+valeur6; //code postal
+			sAH6="'"+valeur6; //code postal
 			}
-			sA7=valeur7;
+			sAH7=valeur7;
+	    }
+
+		if (attribut2.compare("WORK")==0){
+			sAW1=valeur1;
+			sAW2=valeur2;
+			sAW3=valeur3;
+			sAW4=valeur4;
+			sAW5=valeur5;
+			if (valeur6.length()>0) {
+			sAW6="'"+valeur6; //code postal
+			}
+			sAW7=valeur7;
 	    }
 
 	} else if (attribut1.compare("ORG")==0){
@@ -376,21 +401,30 @@ void fDecouperLigneVcf(string ligne) {
 		  << ";sTC:" 		  << sTC
 		  << ";sTH:" 		  << sTH
 		  << ";sTW:" 		  << sTW
-		  << ";sE1:"		  << sE1
-		  << ";sE2:"		  << sE2
-		  << ";sE3:"		  << sE3
+		  << ";sEH:"		  << sEH
+		  << ";sEW:"		  << sEW
 		  << ";sO1:"		<< sO1
 		  << ";sO2:"		<< sO2
 		  << ";sO3:"		<< sO3
-		  << ";sA1:"		<< sA1
-		  << ";sA2:"		<< sA2
-		  << ";sA3:"		<< sA3
-		  << ";sA4:"		<< sA4
-		  << ";sA5:"		<< sA5
-		  << ";sA6:"		<< sA6
-		  << ";sA7:"		<< sA7
 		  << ";sTI:" 		  << sTI
 		  << ";sNT:" 		  << sNT
+
+		  << ";sAH1:"		<< sAH1
+		  << ";sAH2:"		<< sAH2
+		  << ";sAH3:"		<< sAH3
+		  << ";sAH4:"		<< sAH4
+		  << ";sAH5:"		<< sAH5
+		  << ";sAH6:"		<< sAH6
+		  << ";sAH7:"		<< sAH7
+
+		  << ";sAW1:"		<< sAW1
+		  << ";sAW2:"		<< sAW2
+		  << ";sAW3:"		<< sAW3
+		  << ";sAW4:"		<< sAW4
+		  << ";sAW5:"		<< sAW5
+		  << ";sAW6:"		<< sAW6
+		  << ";sAW7:"		<< sAW7
+
 		  << endl
 		  ;
 	}
@@ -413,11 +447,204 @@ void fDecouperLigneCsv(string ligne) {
 	sN2 = ligne.substr(0, pos);
 	ligne.erase(0, pos + separateur.length());
 
-	  cout << "sN1:" << sN1
-	  << endl
-	  << "sN2:" << sN2
-	  << endl
-	  ;
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sN3 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sN4 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sTC = ligne.substr(0, pos);
+	sTC =fTranscoderDebutLigne(sTC, "'", "");
+
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sTH = ligne.substr(0, pos);
+	sTH =fTranscoderDebutLigne(sTH, "'", "");
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sTW = ligne.substr(0, pos);
+	sTW =fTranscoderDebutLigne(sTW, "'", "");
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sEH = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sEW = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sO1 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sO2 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sO3 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sTI = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sNT = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sAH1 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sAH2 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sAH3 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sAH4 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sAH5 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sAH6 = ligne.substr(0, pos);
+	sAH6 =fTranscoderDebutLigne(sAH6, "'", "");
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sAH7 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sAW1 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sAW2 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sAW3 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sAW4 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sAW5 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sAW6 = ligne.substr(0, pos);
+	sAW6 =fTranscoderDebutLigne(sAW6, "'", "");
+	ligne.erase(0, pos + separateur.length());
+
+
+	//chercher + charger + couper
+	pos = ligne.find(separateur);
+	sAW7 = ligne.substr(0, pos);
+	ligne.erase(0, pos + separateur.length());
+
+	cout << " -> fDecouperLigneCsv: "
+	<< "sN1:" << sN1
+	<< ";sN2:" 		  << sN2
+	<< ";sN3:" 		  << sN3
+	<< ";sN4:" 		  << sN4
+	<< ";sTC:" 		  << sTC
+	<< ";sTH:" 		  << sTH
+	<< ";sTW:" 		  << sTW
+	<< ";sEH:"		  << sEH
+	<< ";sEW:"		  << sEW
+	<< endl
+	<< ";sO1:"		<< sO1
+	<< ";sO2:"		<< sO2
+	<< ";sO3:"		<< sO3
+	<< ";sTI:" 		  << sTI
+	<< ";sNT:" 		  << sNT
+	<< endl
+
+	<< ";sAH1:"		<< sAH1
+	<< ";sAH2:"		<< sAH2
+	<< ";sAH3:"		<< sAH3
+	<< ";sAH4:"		<< sAH4
+	<< ";sAH5:"		<< sAH5
+	<< ";sAH6:"		<< sAH6
+	<< ";sAH7:"		<< sAH7
+	<< endl
+
+	<< ";sAW1:"		<< sAW1
+	<< ";sAW2:"		<< sAW2
+	<< ";sAW3:"		<< sAW3
+	<< ";sAW4:"		<< sAW4
+	<< ";sAW5:"		<< sAW5
+	<< ";sAW6:"		<< sAW6
+	<< ";sAW7:"		<< sAW7
+
+	<< endl;
+
 
 }
 
@@ -436,14 +663,16 @@ void fCsvVersVcf(void) {
   string ligne="";
 
   if  (!ficEntree){
-      cout << "ERREUR: Impossible d'ouvrir ficEntree" << nomFicEntree<< endl;
+      cout << "ERREUR: Impossible d'ouvrir ficEntree " << nomFicEntree<< endl;
       return;
   }
   if  (!ficSortie){
-      cout << "ERREUR: Impossible d'ouvrir ficSortie" << nomFicSortie<< endl;
+      cout << "ERREUR: Impossible d'ouvrir ficSortie " << nomFicSortie<< endl;
       ficEntree.close();
       return;
   }
+
+  getline(ficEntree, ligne); //ne pas traiter la ligne d'entete
 
   while(getline(ficEntree, ligne)) {
 	  if (ligne.length()>5) { // moins de 5 car <=> n'importe quoi dans la ligne!!
@@ -454,11 +683,11 @@ void fCsvVersVcf(void) {
 		  ficSortie	<< "TEL;CELL:" << sTC<< endl;
 		  ficSortie	<< "TEL;HOME:" << sTH<< endl;
 		  ficSortie	<< "TEL;WORK:" << sTW<< endl;
-		  ficSortie	<< "EMAIL;HOME:" << "empers@fff.com"<< endl;
-		  ficSortie	<< "EMAIL;WORK:" << "empri@fff.com"<< endl;
-		  ficSortie	<< "ADR;HOME:" << ";" << "uuu" << ";" << "Rrr" << ";" << "Vvv" << ";" << "zz" << ";" << "67000" << ";" << "Pay"<< endl;
-		  ficSortie	<< "ADR;WORK:" << ";" << "uuu" << ";" << "Rrr" << ";" << "Vvv" << ";" << "zz" << ";" << "67000" << ";" << "Pay"<< endl;
-		  ficSortie	<< "ORG:" << sO1 << ";" << sO2<< endl;
+		  ficSortie	<< "EMAIL;HOME:" << sEH<< endl;
+		  ficSortie	<< "EMAIL;WORK:" << sEW<< endl;
+		  ficSortie	<< "ADR;HOME:" << ";" << sAH1 << ";" << sAH2  << ";" << sAH3  << ";" << sAH4  << ";" << sAH5  << ";" << sAH6 << ";" << sAH7 << endl;
+		  ficSortie	<< "ADR;WORK:" << ";" << sAW1 << ";" << sAW2  << ";" << sAW3  << ";" << sAW4  << ";" << sAW5  << ";" << sAW6 << ";" << sAW7 << endl;
+		  ficSortie	<< "ORG:" << sO1 << ";" << sO2<< ";" << sO2<< endl;
 		  ficSortie	<< "TITLE:" << sTI<< endl;
 		  ficSortie	<< "NOTE:" << sNT<< endl;
 		  ficSortie	<< "END:VCARD"<< endl;
@@ -501,24 +730,31 @@ void fVcfVersCsv(void) {
 	  << "TEL_HOME"<< '\t'
 	  << "TEL_WORK"<< '\t'
 
-	  << "EMAIL_1"<< '\t'
-	  << "EMAIL_2"<< '\t'
-	  << "EMAIL_3"<< '\t'
+	  << "EMAIL_H"<< '\t'
+	  << "EMAIL_W"<< '\t'
 
 	  << "ORG1"<< '\t'
 	  << "ORG2"<< '\t'
 	  << "ORG3"<< '\t'
 
-	  << "ADR1"<< '\t'
-	  << "ADR2"<< '\t'
-	  << "ADR3"<< '\t'
-	  << "ADR4"<< '\t'
-	  << "ADR5"<< '\t'
-	  << "ADR6"<< '\t'
-	  << "ADR7"<< '\t'
+	  << "TIT"<< '\t'
+	  << "NOTE"<< '\t'
 
-	  << "TITLE"<< '\t'
-	  << "NOTE"
+	  << "ADH1"<< '\t'
+	  << "ADH2"<< '\t'
+	  << "ADH3"<< '\t'
+	  << "ADH4"<< '\t'
+	  << "ADH5"<< '\t'
+	  << "ADH6"<< '\t'
+	  << "ADH7"<< '\t'
+
+	  << "ADW1"<< '\t'
+	  << "ADW2"<< '\t'
+	  << "ADW3"<< '\t'
+	  << "ADW4"<< '\t'
+	  << "ADW5"<< '\t'
+	  << "ADW6"<< '\t'
+	  << "ADW7"<< '\t'
 	  << endl
 	  ;
 
@@ -547,21 +783,30 @@ void fVcfVersCsv(void) {
 				<< "'" << sTC<< '\t'
 				<< "'" << sTH<< '\t'
 				<< "'" << sTW<< '\t'
-				<< sE1<< '\t'
-				<< sE2<< '\t'
-				<< sE3<< '\t'
+				<< sEH<< '\t'
+				<< sEW<< '\t'
 				<< sO1<< '\t'
 				<< sO2<< '\t'
 				<< sO3<< '\t'
-				<< sA1<< '\t'
-				<< sA2<< '\t'
-				<< sA3<< '\t'
-				<< sA4<< '\t'
-				<< sA5<< '\t'
-				<< sA6<< '\t'
-				<< sA7<< '\t'
 				<< sTI<< '\t'
-				<< sNT
+				<< sNT<< '\t'
+
+				<< sAH1<< '\t'
+				<< sAH2<< '\t'
+				<< sAH3<< '\t'
+				<< sAH4<< '\t'
+				<< sAH5<< '\t'
+				<< sAH6<< '\t'
+				<< sAH7<< '\t'
+
+				<< sAW1<< '\t'
+				<< sAW2<< '\t'
+				<< sAW3<< '\t'
+				<< sAW4<< '\t'
+				<< sAW5<< '\t'
+				<< sAW6<< '\t'
+				<< sAW7<< '\t'
+
 				<< endl
 				;
 
@@ -572,22 +817,29 @@ void fVcfVersCsv(void) {
 				sTC="";
 				sTH="";
 				sTW="";
-				sE1="";
-				sE2="";
-				sE3="";
+				sEH="";
+				sEW="";
 				sO1="";
 				sO2="";
 				sO3="";
-				sA1="";
-				sA2="";
-				sA3="";
-				sA4="";
-				sA5="";
-				sA6="";
-				sA7="";
+				sAH1="";
+				sAH2="";
+				sAH3="";
+				sAH4="";
+				sAH5="";
+				sAH6="";
+				sAH7="";
 
-				sNT="";
+				sAW1="";
+				sAW2="";
+				sAW3="";
+				sAW4="";
+				sAW5="";
+				sAW6="";
+				sAW7="";
+
 				sTI="";
+				sNT="";
 
 			  }
 
