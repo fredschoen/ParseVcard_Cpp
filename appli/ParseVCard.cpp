@@ -11,7 +11,7 @@
 // void fVcfVersCsv(void)
 // void fDecoupeLigneCsv(string ligne)
 // void fDecoupeLigneVcf(string ligne)
-// string fDecoupeSousLigne(string sousLigne)
+// void fDecoupeSousLigne(string sousLigne)
 // string fTranscodeTexte(string sTexte)
 // string fTranscodeTexte1(string sTexte, string sCode, string sDecode)
 //============================================================================
@@ -187,7 +187,7 @@ return sRetour;
 
 
 //============================================================================
-string fDecoupeSousLigne(string sousLigne) {
+void fDecoupeSousLigne(string sousLigne) {
 	//============================================================================
 	std::string separateur = ";";
 	string sRetour="";
@@ -222,9 +222,8 @@ string fDecoupeSousLigne(string sousLigne) {
     } else if (sElement3.length()<1) {sElement3=sElement5;
     } else if (sElement4.length()<1) {sElement4=sElement5;
     }
-	sRetour=sElement1;
 	cout<<"fDecoupeSousLigne: " << sElement1 <<',' << sElement2 <<',' << sElement3 <<',' << sElement4 <<',' << endl;
-return sRetour;
+return;
 }
 //============================================================================
 void fDecoupeLigneVcf(string ligne) {
@@ -256,7 +255,7 @@ void fDecoupeLigneVcf(string ligne) {
 	elementB= ligne;
 
 	//attribut de la ligne
-	bidon=fDecoupeSousLigne(elementA);
+	fDecoupeSousLigne(elementA);
 	sElementA1=sElement1;
 	sElementA2=sElement2;
 
@@ -266,7 +265,7 @@ void fDecoupeLigneVcf(string ligne) {
 	||  (sElementA1.compare("ORG")==0)
 			)
 	{
-		bidon=fDecoupeSousLigne(elementB);
+		fDecoupeSousLigne(elementB);
 		sElementB1=sElement1;
 		sElementB2=sElement2;
 		sElementB3=sElement3;
