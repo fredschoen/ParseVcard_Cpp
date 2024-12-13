@@ -231,78 +231,77 @@ void fDecoupeLigneVcf(string ligne) {
 	std::string separateur = ":";
 
 	size_t pos = 0;
-	std::string elementA="";
-	std::string elementB="";
-	std::string bidon="";
+	std::string tabAttribut="";
+	std::string tabValeur="";
+	
+	string attribut1="";
+	string attribut2="";
 
-	string sElementA1="";
-	string sElementA2="";
-
-	string sElementB1="";
-	string sElementB2="";
-	string sElementB3="";
-	string sElementB4="";
+	string valeur1="";
+	string valeur2="";
+	string valeur3="";
+	string valeur4="";
 
 	// decoupage de la ligne: �l�ment 1
 	pos = ligne.find(separateur);
-	elementA = ligne.substr(0, pos);
+	tabAttribut = ligne.substr(0, pos);
 	// Majuscule
-	for (auto & c: elementA) c = toupper(c);
+	for (auto & c: tabAttribut) c = toupper(c);
 
 	// couper la ligne
 	ligne.erase(0, pos + separateur.length());
 	// dernier element=le reste de la ligne: �l�ment 2
-	elementB= ligne;
+	tabValeur= ligne;
 
 	//attribut de la ligne
-	fDecoupeSousLigne(elementA);
-	sElementA1=sElement1;
-	sElementA2=sElement2;
+	fDecoupeSousLigne(tabAttribut);
+	attribut1=sElement1;
+	attribut2=sElement2;
 
 
 	//valeurs de la ligne
-	if ((sElementA1.compare("N")==0)
-	||  (sElementA1.compare("ORG")==0)
+	if ((attribut1.compare("N")==0)
+	||  (attribut1.compare("ORG")==0)
 			)
 	{
-		fDecoupeSousLigne(elementB);
-		sElementB1=sElement1;
-		sElementB2=sElement2;
-		sElementB3=sElement3;
-		sElementB4=sElement4;
+		fDecoupeSousLigne(tabValeur);
+		valeur1=sElement1;
+		valeur2=sElement2;
+		valeur3=sElement3;
+		valeur4=sElement4;
 	}
 
 	//charger la bonne colonne
-	if (sElementA1.compare("N")==0) {
-		sN1=sElementB1;
-		sN2=sElementB2;
-		sN3=sElementB3;
-		sN4=sElementB4;
-	} else if (sElementA1.compare("TEL")==0){
-		if (sElementA2.compare("CELL")==0){
-		       sTC=elementB;
-	    } else if (sElementA2.compare("HOME")==0){
-	    	   sTH=elementB;
-	    } else sTW=elementB;
-	} else if (sElementA1.compare("EMAIL")==0){
+	if (attribut1.compare("N")==0) {
+		sN1=valeur1;
+		sN2=valeur2;
+		sN3=valeur3;
+		sN4=valeur4;
+	} else if (attribut1.compare("TEL")==0){
+		if (attribut2.compare("CELL")==0){
+		       sTC=tabValeur;
+	    } else if (attribut2.compare("HOME")==0){
+	    	   sTH=tabValeur;
+	    } else sTW=tabValeur;
+	} else if (attribut1.compare("EMAIL")==0){
 		if (sE1==""){
-		       sE1=elementB;
+		       sE1=tabValeur;
 	    } else if (sE2==""){
-	    	   sE2=elementB;
-	    } else sE3=elementB;
-	} else if (sElementA1.compare("ORG")==0){
-		sO1=sElementB1;
-		sO2=sElementB2;
-		sO3=sElementB3;
+	    	   sE2=tabValeur;
+	    } else sE3=tabValeur;
+	} else if (attribut1.compare("ORG")==0){
+		sO1=valeur1;
+		sO2=valeur2;
+		sO3=valeur3;
 
-	} else if (sElementA1.compare("TITLE")==0){
-		sT=elementB;
-	} else if (sElementA1.compare("NOTE")==0){
-		sNT=elementB;
+	} else if (attribut1.compare("TITLE")==0){
+		sT=tabValeur;
+	} else if (attribut1.compare("NOTE")==0){
+		sNT=tabValeur;
 	} else {
 		//RAZ element2
-		elementB="";
-		if (elementA.compare("BEGIN")==0) {
+		tabValeur="";
+		if (tabAttribut.compare("BEGIN")==0) {
 		   cout << "-----------------------------------------------" << endl;
  	    }
 	}
@@ -312,7 +311,7 @@ void fDecoupeLigneVcf(string ligne) {
 	sN3=fTranscodeTexte(sN3);
 	sN4=fTranscodeTexte(sN4);
 	//display
-	if (elementB.length()>0){
+	if (tabValeur.length()>0){
 		  cout << " -> fDecoupeLigneVcf: "
 		  << "sN1:" << sN1
 		  << ";sN2:" 		  << sN2
