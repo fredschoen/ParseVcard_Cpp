@@ -13,7 +13,7 @@
 // void fDecouperLigneVcf(string ligne)
 // void fSeparerElements(string sousLigne)
 // string fTranscoderTexte(string sTexte)
-// string fTranscoderTexte1(string sTexte, string sCode, string sDecode)
+// string fTranscoderTouesOccurrences(string sTexte, string sCode, string sDecode)
 //============================================================================
 
 #include <iostream>     // std::cout
@@ -65,11 +65,11 @@ string nom3="adr_col";
 
 
 //============================================================================
-string fTranscoderTexte1(string sTexte, string sCode, string sDecode) {
+string fTranscoderTouesOccurrences(string sTexte, string sCode, string sDecode) {
 // objectif: trouver la chaine "sCode" dans le texte "sTexte" et le remplacer par "sDecode"
 //============================================================================
 
-	//	cout<<"fTranscoderTexte1, in  : " << sTexte << "," << sCode << "," << sDecode << "," << endl;
+	//	cout<<"fTranscoderTouesOccurrences, in  : " << sTexte << "," << sCode << "," << sDecode << "," << endl;
 	std::string sRetour=sTexte;
 	std::size_t found =sRetour.find(sCode);
 	while(found!=std::string::npos) {
@@ -81,6 +81,22 @@ return sRetour;
 }
 
 //============================================================================
+string fTranscoderDebutLigne(string sTexte, string sCode, string sDecode) {
+// objectif: trouver la chaine "sCode" dans le texte "sTexte" et le remplacer par "sDecode"
+//============================================================================
+
+	//	cout<<"fTranscoderDebutLigne, in  : " << sTexte << "," << sCode << "," << sDecode << "," << endl;
+	std::string sRetour=sTexte;
+	std::size_t found =sRetour.find(sCode);
+	if(found==0) {
+		sRetour.replace(found, sCode.length(), sDecode);
+		cout<<"fTranscoderDebutLigne,0 sRetour=" << sRetour << endl;
+	}
+return sRetour;
+}
+
+
+//============================================================================
 string fTranscoderTexte(string sTexte) {
 	//============================================================================
 //	cout<<"fTranscoderTexte, in  : " << sTexte << endl;
@@ -89,108 +105,108 @@ string fTranscoderTexte(string sTexte) {
 // d'abord les "=C3"
 
 //accent des majuscules
-	sRetour=fTranscoderTexte1(sRetour, "=C3=89", "É");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=C3=89", "É");
 
 //accent du a
-	sRetour=fTranscoderTexte1(sRetour, "=C3=A0", "à");
-	sRetour=fTranscoderTexte1(sRetour, "=C3=A2", "â");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=C3=A0", "à");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=C3=A2", "â");
 
 //accent du c
-	sRetour=fTranscoderTexte1(sRetour, "=C3=A7", "ç");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=C3=A7", "ç");
 
 //accent du e
-	sRetour=fTranscoderTexte1(sRetour, "=C3=A8", "è");
-	sRetour=fTranscoderTexte1(sRetour, "=C3=A9", "é");
-	sRetour=fTranscoderTexte1(sRetour, "=C3=AA", "ê");
-	sRetour=fTranscoderTexte1(sRetour, "=C3=AB", "ë");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=C3=A8", "è");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=C3=A9", "é");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=C3=AA", "ê");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=C3=AB", "ë");
 
 //accent du i
-	sRetour=fTranscoderTexte1(sRetour, "=C3=AE", "î");
-	sRetour=fTranscoderTexte1(sRetour, "=C3=AF", "ï");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=C3=AE", "î");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=C3=AF", "ï");
 
 //accent du o
-	sRetour=fTranscoderTexte1(sRetour, "=C3=B4", "ô");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=C3=B4", "ô");
 
 //accent du u
-	sRetour=fTranscoderTexte1(sRetour, "=C3=B9", "ù");
-	sRetour=fTranscoderTexte1(sRetour, "=C3=BB", "û");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=C3=B9", "ù");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=C3=BB", "û");
 
 // ensuite les <> "=C3"
 
-	sRetour=fTranscoderTexte1(sRetour, "=20", " ");
-	sRetour=fTranscoderTexte1(sRetour, "=26", "&");
-	sRetour=fTranscoderTexte1(sRetour, "=28", "(");
-	sRetour=fTranscoderTexte1(sRetour, "=29", ")");
-	sRetour=fTranscoderTexte1(sRetour, "=2E", ".");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=20", " ");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=26", "&");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=28", "(");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=29", ")");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=2E", ".");
 
-	sRetour=fTranscoderTexte1(sRetour, "=30", "0");
-	sRetour=fTranscoderTexte1(sRetour, "=31", "1");
-	sRetour=fTranscoderTexte1(sRetour, "=32", "2");
-	sRetour=fTranscoderTexte1(sRetour, "=33", "3");
-	sRetour=fTranscoderTexte1(sRetour, "=34", "4");
-	sRetour=fTranscoderTexte1(sRetour, "=35", "5");
-	sRetour=fTranscoderTexte1(sRetour, "=36", "6");
-	sRetour=fTranscoderTexte1(sRetour, "=37", "7");
-	sRetour=fTranscoderTexte1(sRetour, "=38", "8");
-	sRetour=fTranscoderTexte1(sRetour, "=39", "9");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=30", "0");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=31", "1");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=32", "2");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=33", "3");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=34", "4");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=35", "5");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=36", "6");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=37", "7");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=38", "8");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=39", "9");
 
-	sRetour=fTranscoderTexte1(sRetour, "=41", "A");
-	sRetour=fTranscoderTexte1(sRetour, "=42", "B");
-	sRetour=fTranscoderTexte1(sRetour, "=43", "C");
-	sRetour=fTranscoderTexte1(sRetour, "=44", "D");
-	sRetour=fTranscoderTexte1(sRetour, "=45", "E");
-	sRetour=fTranscoderTexte1(sRetour, "=46", "F");
-	sRetour=fTranscoderTexte1(sRetour, "=47", "G");
-	sRetour=fTranscoderTexte1(sRetour, "=48", "H");
-	sRetour=fTranscoderTexte1(sRetour, "=49", "I");
-	sRetour=fTranscoderTexte1(sRetour, "=4A", "J");
-	sRetour=fTranscoderTexte1(sRetour, "=4B", "K");
-	sRetour=fTranscoderTexte1(sRetour, "=4C", "L");
-	sRetour=fTranscoderTexte1(sRetour, "=4D", "M");
-	sRetour=fTranscoderTexte1(sRetour, "=4E", "N");
-	sRetour=fTranscoderTexte1(sRetour, "=4F", "O");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=41", "A");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=42", "B");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=43", "C");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=44", "D");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=45", "E");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=46", "F");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=47", "G");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=48", "H");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=49", "I");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=4A", "J");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=4B", "K");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=4C", "L");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=4D", "M");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=4E", "N");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=4F", "O");
 
-	sRetour=fTranscoderTexte1(sRetour, "=50", "P");
-	sRetour=fTranscoderTexte1(sRetour, "=51", "Q");
-	sRetour=fTranscoderTexte1(sRetour, "=52", "R");
-	sRetour=fTranscoderTexte1(sRetour, "=53", "S");
-	sRetour=fTranscoderTexte1(sRetour, "=54", "T");
-	sRetour=fTranscoderTexte1(sRetour, "=55", "U");
-	sRetour=fTranscoderTexte1(sRetour, "=56", "V");
-	sRetour=fTranscoderTexte1(sRetour, "=57", "W");
-	sRetour=fTranscoderTexte1(sRetour, "=58", "X");
-	sRetour=fTranscoderTexte1(sRetour, "=59", "Y");
-	sRetour=fTranscoderTexte1(sRetour, "=5A", "Z");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=50", "P");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=51", "Q");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=52", "R");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=53", "S");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=54", "T");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=55", "U");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=56", "V");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=57", "W");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=58", "X");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=59", "Y");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=5A", "Z");
 
-	sRetour=fTranscoderTexte1(sRetour, "=61", "a");
-	sRetour=fTranscoderTexte1(sRetour, "=62", "b");
-	sRetour=fTranscoderTexte1(sRetour, "=63", "c");
-	sRetour=fTranscoderTexte1(sRetour, "=64", "d");
-	sRetour=fTranscoderTexte1(sRetour, "=65", "e");
-	sRetour=fTranscoderTexte1(sRetour, "=66", "f");
-	sRetour=fTranscoderTexte1(sRetour, "=67", "g");
-	sRetour=fTranscoderTexte1(sRetour, "=68", "h");
-	sRetour=fTranscoderTexte1(sRetour, "=69", "i");
-	sRetour=fTranscoderTexte1(sRetour, "=6A", "j");
-	sRetour=fTranscoderTexte1(sRetour, "=6B", "k");
-	sRetour=fTranscoderTexte1(sRetour, "=6C", "l");
-	sRetour=fTranscoderTexte1(sRetour, "=6D", "m");
-	sRetour=fTranscoderTexte1(sRetour, "=6E", "n");
-	sRetour=fTranscoderTexte1(sRetour, "=6F", "o");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=61", "a");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=62", "b");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=63", "c");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=64", "d");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=65", "e");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=66", "f");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=67", "g");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=68", "h");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=69", "i");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=6A", "j");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=6B", "k");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=6C", "l");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=6D", "m");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=6E", "n");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=6F", "o");
 
-	sRetour=fTranscoderTexte1(sRetour, "=70", "p");
-	sRetour=fTranscoderTexte1(sRetour, "=71", "q");
-	sRetour=fTranscoderTexte1(sRetour, "=72", "r");
-	sRetour=fTranscoderTexte1(sRetour, "=73", "s");
-	sRetour=fTranscoderTexte1(sRetour, "=74", "t");
-	sRetour=fTranscoderTexte1(sRetour, "=75", "u");
-	sRetour=fTranscoderTexte1(sRetour, "=76", "v");
-	sRetour=fTranscoderTexte1(sRetour, "=77", "w");
-	sRetour=fTranscoderTexte1(sRetour, "=78", "x");
-	sRetour=fTranscoderTexte1(sRetour, "=79", "y");
-	sRetour=fTranscoderTexte1(sRetour, "=7A", "z");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=70", "p");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=71", "q");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=72", "r");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=73", "s");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=74", "t");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=75", "u");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=76", "v");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=77", "w");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=78", "x");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=79", "y");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=7A", "z");
 
-	sRetour=fTranscoderTexte1(sRetour, "=A3", ":");
+	sRetour=fTranscoderTouesOccurrences(sRetour, "=A3", ":");
 
 //	cout<<"fTranscoderTexte, out : " << sRetour << endl;
 return sRetour;
@@ -271,16 +287,21 @@ void fDecouperLigneVcf(string ligne) {
 	string valeur6="";
 	string valeur7="";
 
+	// cas bizarres
+	ligne =fTranscoderDebutLigne(ligne, "ADR;HOME;", "ADR;HOME:");
+	ligne =fTranscoderDebutLigne(ligne, "NOTE;", "NOTE:");
+
 	// decoupage de la ligne: �l�ment 1
 	pos = ligne.find(separAttributValeur);
 	tabAttribut = ligne.substr(0, pos);
-	// Majuscule
+
+	// Majuscules
 	for (auto & c: tabAttribut) c = toupper(c);
 
-	// couper la ligne
+	// effacer les attributs dans "ligne"
 	ligne.erase(0, pos + separAttributValeur.length());
 	// dernier element=le reste de la ligne: �l�ment 2
-	tabValeur= ligne;
+	tabValeur= fTranscoderTexte(ligne);
 
 	//attribut de la ligne
 	fSeparerElements(tabAttribut);
@@ -323,7 +344,9 @@ void fDecouperLigneVcf(string ligne) {
 			sA3=valeur3;
 			sA4=valeur4;
 			sA5=valeur5;
-			sA6=valeur6;
+			if (valeur6.length()>0) {
+			sA6="'"+valeur6; //code postal
+			}
 			sA7=valeur7;
 	    }
 
@@ -343,10 +366,6 @@ void fDecouperLigneVcf(string ligne) {
  	    }
 	}
 
-	sN1=fTranscoderTexte(sN1);
-	sN2=fTranscoderTexte(sN2);
-	sN3=fTranscoderTexte(sN3);
-	sN4=fTranscoderTexte(sN4);
 	//display
 	if (tabValeur.length()>0){
 		  cout << " -> fDecouperLigneVcf: "
