@@ -26,8 +26,6 @@ string sElement2="";
 string sElement3="";
 string sElement4="";
 string sElement5="";
-string sElement6="";
-string sElement7="";
 
 string sN1="";
 string sN2="";
@@ -40,14 +38,6 @@ string sTW="";
 string sE1="";
 string sE2="";
 string sE3="";
-
-string sA1="";
-string sA2="";
-string sA3="";
-string sA4="";
-string sA5="";
-string sA6="";
-string sA7="";
 
 string sO1="";
 string sO2="";
@@ -77,7 +67,6 @@ string fTranscodeTexte1(string sTexte, string sCode, string sDecode) {
 //	cout<<"fTranscodeTexte, out : " << sRetour << endl;
 return sRetour;
 }
-
 
 
 //============================================================================
@@ -207,8 +196,7 @@ string fDecoupeSousLigne(string sousLigne) {
     sElement3 = "";
     sElement4 = "";
     sElement5 = "";
-    sElement6 = "";
-    sElement7 = "";
+
 
 	size_t pos = 0;
 	int numElement=0;
@@ -222,29 +210,20 @@ string fDecoupeSousLigne(string sousLigne) {
 		    sElement3 = sousLigne.substr(0, pos);
 	    }else if (numElement==4) {
 		    sElement4 = sousLigne.substr(0, pos);
-	    }else if (numElement==5) {
-		    sElement5 = sousLigne.substr(0, pos);
-	    }else if (numElement==6) {
-		    sElement6 = sousLigne.substr(0, pos);
-	    }else if (numElement==7) {
-		    sElement7 = sousLigne.substr(0, pos);
-		}
+	    }
 	    sousLigne.erase(0, pos + separateur.length());
-		std::cout << "=" << sousLigne << "=" << endl;
+		//std::cout << "=" << sousLigne << "=" ;
 	}
-    sElement7 = sousLigne;
+    sElement5 = sousLigne;
 
     // Compacter
-//???	if (sElement1.length()<1) { sElement1=sElement5;
-//??? else if (sElement2.length()<1) {sElement2=sElement5;
-//???    } else if (sElement3.length()<1) {sElement3=sElement5;
-//???    } else if (sElement4.length()<1) {sElement4=sElement5;
-//???    }
+	if (sElement1.length()<1) { sElement1=sElement5;
+	} else if (sElement2.length()<1) {sElement2=sElement5;
+    } else if (sElement3.length()<1) {sElement3=sElement5;
+    } else if (sElement4.length()<1) {sElement4=sElement5;
+    }
 	sRetour=sElement1;
-	cout<<"fDecoupeSousLigne: " 
-	 << sElement1 <<',' << sElement2 <<',' << sElement3 <<','
-	 << sElement4 <<',' << sElement5 <<',' << sElement6 <<',' << sElement7 <<','
-	 << endl;
+	cout<<"fDecoupeSousLigne: " << sElement1 <<',' << sElement2 <<',' << sElement3 <<',' << sElement4 <<',' << endl;
 return sRetour;
 }
 //============================================================================
@@ -265,7 +244,7 @@ void fDecoupeLigneVcf(string ligne) {
 	string sElementB3="";
 	string sElementB4="";
 
-	// decoupage de la ligne: element 1
+	// decoupage de la ligne: �l�ment 1
 	pos = ligne.find(separateur);
 	elementA = ligne.substr(0, pos);
 	// Majuscule
@@ -273,7 +252,7 @@ void fDecoupeLigneVcf(string ligne) {
 
 	// couper la ligne
 	ligne.erase(0, pos + separateur.length());
-	// dernier element=le reste de la ligne: element 2
+	// dernier element=le reste de la ligne: �l�ment 2
 	elementB= ligne;
 
 	//attribut de la ligne
@@ -306,21 +285,12 @@ void fDecoupeLigneVcf(string ligne) {
 	    } else if (sElementA2.compare("HOME")==0){
 	    	   sTH=elementB;
 	    } else sTW=elementB;
-
 	} else if (sElementA1.compare("EMAIL")==0){
 		if (sE1==""){
 		       sE1=elementB;
 	    } else if (sE2==""){
 	    	   sE2=elementB;
 	    } else sE3=elementB;
-
-	} else if (sElementA1.compare("ADR")==0){
-		if (sElementA2.compare("HOME")==0){
-			sA1=sElementB1;
-			sA2=sElementB2;
-			sA3=sElementB3;
-			sA4=sElementB4;
-		}
 	} else if (sElementA1.compare("ORG")==0){
 		sO1=sElementB1;
 		sO2=sElementB2;
@@ -346,30 +316,20 @@ void fDecoupeLigneVcf(string ligne) {
 	if (elementB.length()>0){
 		  cout << " -> fDecoupeLigneVcf: "
 		  << "sN1:" << sN1
-		  << ";sN2:"  << sN2
-		  << ";sN3:"  << sN3
-		  << ";sN4:"  << sN4
-		  << endl
-		  << ";sTC:"  << sTC
-		  << ";sTH:"  << sTH
-		  << ";sTW:"  << sTW
-		  << ";sE1:"  << sE1
-		  << ";sE2:"  << sE2
-		  << ";sE3:"  << sE3
-		  << endl
-		  << ";sA1:"  << sA1
-		  << ";sA2:"  << sA2
-		  << ";sA3:"  << sA3
-		  << ";sA4:"  << sA4
-		  << ";sA5:"  << sA5
-		  << ";sA6:"  << sA6
-		  << ";sA7:"  << sA7
-		  << endl
-		  << ";sO1:" << sO1
-		  << ";sO2:" << sO2
-		  << ";sO3:" << sO3
-		  << ";sT:"  << sT
-		  << ";sNT:" << sNT
+		  << ";sN2:" 		  << sN2
+		  << ";sN3:" 		  << sN3
+		  << ";sN4:" 		  << sN4
+		  << ";sTC:" 		  << sTC
+		  << ";sTH:" 		  << sTH
+		  << ";sTW:" 		  << sTW
+		  << ";sE1:"		  << sE1
+		  << ";sE2:"		  << sE2
+		  << ";sE3:"		  << sE3
+		  << ";sO1:"		<< sO1
+		  << ";sO2:"		<< sO2
+		  << ";sO3:"		<< sO3
+		  << ";sT:" 		  << sT
+		  << ";sNT:" 		  << sNT
 		  << endl
 		  ;
 	}
@@ -468,109 +428,112 @@ void fCsvVersVcf(void) {
 //============================================================================
 void fVcfVersCsv(void) {
 	//============================================================================
-	std::cout << "exec fVcfVersCsv" << endl;
+  std::cout << "exec fVcfVersCsv" << endl;
 
-	cout << "nomFicEntree=[" << nomFicEntree << "]" << endl;
-	cout << "nomFicSortie=[" << nomFicSortie << "]"<< endl;
+  cout << "nomFicEntree=[" << nomFicEntree << "]" << endl;
+  cout << "nomFicSortie=[" << nomFicSortie << "]"<< endl;
 
-	std::ifstream ficEntree (nomFicEntree);
-	std::ofstream ficSortie (nomFicSortie);
 
-	// traitement
-	if  (not(ficSortie)){
+  std::ifstream ficEntree (nomFicEntree); // prendre un fichier ANSI (binary ne change pas le pb UTF8)
+  std::ofstream ficSortie (nomFicSortie);
+
+  //std::ifstream ficEntree (nomFicEntree, std::ios::binary); (binary ne change pas le pb UTF8)
+
+
+
+// traitement
+  if  (ficSortie){
+	  ficSortie
+	  << "N1" << '\t'
+	  << "N2" << '\t'
+	  << "N3" << '\t'
+	  << "N4" << '\t'
+	  << "TEL_CELL"<< '\t'
+	  << "TEL_HOME"<< '\t'
+	  << "TEL_WORK"<< '\t'
+	  << "EMAIL_1"<< '\t'
+	  << "EMAIL_2"<< '\t'
+	  << "EMAIL_3"<< '\t'
+	  << "ORG1"<< '\t'
+	  << "ORG2"<< '\t'
+	  << "ORG3"<< '\t'
+	  << "TITLE"<< '\t'
+	  << "NOTE"
+	  << endl
+	  ;
+
+	  if  (ficEntree){
+	      cout << "d�but>>>>>>>>>>>>>>>>>>>" << endl;
+		  string ligne; //Une variable pour stocker les lignes lues
+		  int nLigne=0;
+		  //Tant qu'on n'est pas � la fin, on lit
+		  // while(getline(ficEntree, ligne, '\r'))
+		  while(getline(ficEntree, ligne)) {
+			  nLigne+=1;
+			  cout << "getligne " << nLigne << "=" << ligne<< endl;
+			  fDecoupeLigneVcf(ligne);
+
+			  // en fin de card on ecrit
+			  // Majuscule
+			  for (auto & c: ligne) c = toupper(c);
+
+			  if (  ligne.compare("END:VCARD")==0   )
+			  {
+				ficSortie
+				<< sN1 << '\t'
+				<< sN2 << '\t'
+				<< sN3 << '\t'
+				<< sN4 << '\t'
+				<< "'" << sTC<< '\t'
+				<< "'" << sTH<< '\t'
+				<< "'" << sTW<< '\t'
+				<< sE1<< '\t'
+				<< sE2<< '\t'
+				<< sE3<< '\t'
+				<< sO1<< '\t'
+				<< sO2<< '\t'
+				<< sO3<< '\t'
+				<< sT<< '\t'
+				<< sNT
+				<< endl
+				;
+
+				sN1="";
+				sN2="";
+				sN3="";
+				sN4="";
+				sTC="";
+				sTH="";
+				sTW="";
+				sE1="";
+				sE2="";
+				sE3="";
+				sO1="";
+				sO2="";
+				sO3="";
+				sT="";
+				sNT="";
+
+			  }
+
+		  }
+	      cout << "fVcfVersCsv, nomFicEntree=" << nomFicEntree << " nomFicSortie=" << nomFicSortie << " : OK !!!!!!!!!" << endl;
+	  }
+	  else {
+	      cout << "ERREUR: Impossible d'ouvrir " << nomFicEntree<< endl;
+	  }
+  }
+  else {
       cout << "ERREUR: Impossible d'ouvrir " << nomFicSortie << endl;
-	  return;
-	}
-	if  (not(ficEntree)){
-		cout << "ERREUR: Impossible d'ouvrir " << nomFicEntree<< endl;
-	  return;
-	}
-	ficSortie
-	<< "N1" << '\t'
-	<< "N2" << '\t'
-	<< "N3" << '\t'
-	<< "N4" << '\t'
-	<< "TEL_CELL"<< '\t'
-	<< "TEL_HOME"<< '\t'
-	<< "TEL_WORK"<< '\t'
-	<< "EMAIL_1"<< '\t'
-	<< "EMAIL_2"<< '\t'
-	<< "EMAIL_3"<< '\t'
-	<< "ADR1"<< '\t'
-	<< "ADR2"<< '\t'
-	<< "ADR3"<< '\t'
-	<< "ADR4"<< '\t'
-	<< "ADR5"<< '\t'
-	<< "ADR6"<< '\t'
-	<< "ADR7"<< '\t'
-	<< "ORG1"<< '\t'
-	<< "ORG2"<< '\t'
-	<< "ORG3"<< '\t'
-	<< "TITLE"<< '\t'
-	<< "NOTE"
-	<< endl
-	;
-
-	cout << "d�but>>>>>>>>>>>>>>>>>>>" << endl;
-	string ligne; //Une variable pour stocker les lignes lues
-	int nLigne=0;
-	//Tant qu'on n'est pas � la fin, on lit
-	// while(getline(ficEntree, ligne, '\r'))
-	while(getline(ficEntree, ligne)) {
-		nLigne+=1;
-		cout << "getligne " << nLigne << "=" << ligne<< endl;
-		fDecoupeLigneVcf(ligne);
-
-		// en fin de card on ecrit
-		// Majuscule
-		for (auto & c: ligne) c = toupper(c);
-
-		if (ligne.compare("END:VCARD")==0 ) {
-			// écrire la ligne de la carte terminée ici
-			ficSortie
-			<< sN1 << '\t'
-			<< sN2 << '\t'
-			<< sN3 << '\t'
-			<< sN4 << '\t'
-			<< "'" << sTC<< '\t'
-			<< "'" << sTH<< '\t'
-			<< "'" << sTW<< '\t'
-			<< sE1<< '\t'
-			<< sE2<< '\t'
-			<< sE3<< '\t'
-			<< sO1<< '\t'
-			<< sO2<< '\t'
-			<< sO3<< '\t'
-			<< sT<< '\t'
-			<< sNT
-			<< endl
-			;
-
-			// réinit des champs de la prochaine ligne en sortie
-			sN1="";
-			sN2="";
-			sN3="";
-			sN4="";
-			sTC="";
-			sTH="";
-			sTW="";
-			sE1="";
-			sE2="";
-			sE3="";
-			sO1="";
-			sO2="";
-			sO3="";
-			sT="";
-			sNT="";
-
-		}
-	}
+  }
   ficEntree.close();
   return;
 }
 
 
+//============================================================================
 string fChoixNomFic() {
+//============================================================================
     int val=0;
     string sNomFic="";
 
