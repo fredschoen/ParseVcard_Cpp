@@ -5,3 +5,5 @@
 *.csv
 /appli/zSauve
 *.ods
+*.txt
+/appli/data
