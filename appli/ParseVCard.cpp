@@ -9,8 +9,8 @@
 // string fChoixNomFic()
 // void fCsvVersVcf(void)
 // void fVcfVersCsv(void)
-// void fDecouperLigneCsv(string ligne)
-// void fDecouperLigneVcf(string ligne)
+// void fDecouperLigneCsv(string ligneEntree)
+// void fDecouperLigneVcf(string ligneEntree)
 // void fSeparerElements(string sousLigne)
 // string fTranscoderTexte(string sTexte)
 // string fTranscoderTouesOccurrences(string sTexte, string sCode, string sDecode)
@@ -69,6 +69,9 @@ string nomFicSortie="";
 string nom1="vcard";
 string nom2="test";
 string nom3="adr_col";
+
+string separAttributValeur = ":";
+string separateurElements = ";";
 
 
 //============================================================================
@@ -222,7 +225,6 @@ return sRetour;
 //============================================================================
 void fSeparerElements(string sousLigne) {
 	//============================================================================
-	std::string separateur = ";";
     sElement1 = "";
     sElement2 = "";
     sElement3 = "";
@@ -237,31 +239,31 @@ void fSeparerElements(string sousLigne) {
 	sElement1 = sousLigne; //par défaut, il n'y a qu'un élément
 
 	//plusieurs éléments ?
-	while ((pos = sousLigne.find(separateur)) != std::string::npos) {
+	while ((pos = sousLigne.find(separateurElements)) != std::string::npos) {
 		cout << "fSeparerElements sousLigne<" << sousLigne << ">" << endl;
 	    numElement+=1;
 	    if (numElement==1) {
 		    sElement1 = sousLigne.substr(0, pos);
-		    sElement2 = sousLigne.substr(pos+ separateur.length(), sousLigne.length());
+		    sElement2 = sousLigne.substr(pos+ separateurElements.length(), sousLigne.length());
 	    } else if (numElement==2) {
 		    sElement2 = sousLigne.substr(0, pos);
-		    sElement3 = sousLigne.substr(pos+ separateur.length(), sousLigne.length());
+		    sElement3 = sousLigne.substr(pos+ separateurElements.length(), sousLigne.length());
 	    } else if (numElement==3) {
 		    sElement3 = sousLigne.substr(0, pos);
-		    sElement4 = sousLigne.substr(pos+ separateur.length(), sousLigne.length());
+		    sElement4 = sousLigne.substr(pos+ separateurElements.length(), sousLigne.length());
 	    }else if (numElement==4) {
 		    sElement4 = sousLigne.substr(0, pos);
-		    sElement5 = sousLigne.substr(pos+ separateur.length(), sousLigne.length());
+		    sElement5 = sousLigne.substr(pos+ separateurElements.length(), sousLigne.length());
 	    }else if (numElement==5) {
 		    sElement5 = sousLigne.substr(0, pos);
-		    sElement6 = sousLigne.substr(pos+ separateur.length(), sousLigne.length());
+		    sElement6 = sousLigne.substr(pos+ separateurElements.length(), sousLigne.length());
 	    }else if (numElement==6) {
 		    sElement6 = sousLigne.substr(0, pos);
-		    sElement7 = sousLigne.substr(pos+ separateur.length(), sousLigne.length());
+		    sElement7 = sousLigne.substr(pos+ separateurElements.length(), sousLigne.length());
 	    }else if (numElement==7) {
 		    sElement7 = sousLigne;
 	    }
-	    sousLigne.erase(0, pos + separateur.length());
+	    sousLigne.erase(0, pos + separateurElements.length());
 		cout << "fSeparerElements sElementx<" 
 		<< sElement1 << ',' << sElement2 << ',' << sElement3 << ',' 
 		<< sElement4 << ',' << sElement5 << ',' << sElement6 << ',' 
@@ -275,9 +277,8 @@ void fSeparerElements(string sousLigne) {
 return;
 }
 //============================================================================
-void fDecouperLigneVcf(string ligne) {
+void fDecouperLigneVcf(string ligneEntree) {
 	//============================================================================
-	std::string separAttributValeur = ":";
 
 	size_t pos = 0;
 	std::string tabAttribut="";
@@ -295,23 +296,23 @@ void fDecouperLigneVcf(string ligne) {
 	string valeur7="";
 
 	// cas bizarres
-	ligne =fTranscoderDebutLigne(ligne, "ADR;HOME;", "ADR;HOME:");
-	ligne =fTranscoderDebutLigne(ligne, "ADR;WORK;", "ADR;WORK:");
-	ligne =fTranscoderDebutLigne(ligne, "NOTE;", "NOTE:");
-	ligne =fTranscoderDebutLigne(ligne, "TITLE;", "TITLE:");
-	ligne =fTranscoderDebutLigne(ligne, "N;", "N:");
+	ligneEntree =fTranscoderDebutLigne(ligneEntree, "ADR;HOME;", "ADR;HOME:");
+	ligneEntree =fTranscoderDebutLigne(ligneEntree, "ADR;WORK;", "ADR;WORK:");
+	ligneEntree =fTranscoderDebutLigne(ligneEntree, "NOTE;", "NOTE:");
+	ligneEntree =fTranscoderDebutLigne(ligneEntree, "TITLE;", "TITLE:");
+	ligneEntree =fTranscoderDebutLigne(ligneEntree, "N;", "N:");
 
 	// decoupage de la ligne: �l�ment 1
-	pos = ligne.find(separAttributValeur);
-	tabAttribut = ligne.substr(0, pos);
+	pos = ligneEntree.find(separAttributValeur);
+	tabAttribut = ligneEntree.substr(0, pos);
 
 	// Majuscules
 	for (auto & c: tabAttribut) c = toupper(c);
 
-	// effacer les attributs dans "ligne"
-	ligne.erase(0, pos + separAttributValeur.length());
+	// effacer les attributs dans "ligneEntree"
+	ligneEntree.erase(0, pos + separAttributValeur.length());
 	// dernier element=le reste de la ligne: �l�ment 2
-	tabValeur= fTranscoderTexte(ligne);
+	tabValeur= fTranscoderTexte(ligneEntree);
 
 	//attribut de la ligne
 	fSeparerElements(tabAttribut);
@@ -431,182 +432,183 @@ void fDecouperLigneVcf(string ligne) {
 }
 
 //============================================================================
-void fDecouperLigneCsv(string ligne) {
+void fDecouperLigneCsv(string ligneEntree) {
 	//============================================================================
-	std::string separateur = "";
-	separateur += '\t';
+	std::string separateurColonnes = "";
+	separateurColonnes += '\t';
+	
 	size_t pos = 0;
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sN1 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sN1 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sN2 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
-
-
-	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sN3 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sN2 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sN4 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sN3 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sTC = ligne.substr(0, pos);
+	pos = ligneEntree.find(separateurColonnes);
+	sN4 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
+
+
+	//chercher + charger + couper
+	pos = ligneEntree.find(separateurColonnes);
+	sTC = ligneEntree.substr(0, pos);
 	sTC =fTranscoderDebutLigne(sTC, "'", "");
 
-	ligne.erase(0, pos + separateur.length());
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sTH = ligne.substr(0, pos);
+	pos = ligneEntree.find(separateurColonnes);
+	sTH = ligneEntree.substr(0, pos);
 	sTH =fTranscoderDebutLigne(sTH, "'", "");
-	ligne.erase(0, pos + separateur.length());
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sTW = ligne.substr(0, pos);
+	pos = ligneEntree.find(separateurColonnes);
+	sTW = ligneEntree.substr(0, pos);
 	sTW =fTranscoderDebutLigne(sTW, "'", "");
-	ligne.erase(0, pos + separateur.length());
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sEH = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sEH = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sEW = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sEW = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sO1 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sO1 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sO2 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sO2 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sO3 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sO3 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sTI = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sTI = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sNT = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
-
-
-	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sAH1 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sNT = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sAH2 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sAH1 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sAH3 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sAH2 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sAH4 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sAH3 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sAH5 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sAH4 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sAH6 = ligne.substr(0, pos);
+	pos = ligneEntree.find(separateurColonnes);
+	sAH5 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
+
+
+	//chercher + charger + couper
+	pos = ligneEntree.find(separateurColonnes);
+	sAH6 = ligneEntree.substr(0, pos);
 	sAH6 =fTranscoderDebutLigne(sAH6, "'", "");
-	ligne.erase(0, pos + separateur.length());
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sAH7 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sAH7 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sAW1 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sAW1 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sAW2 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sAW2 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sAW3 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sAW3 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sAW4 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sAW4 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sAW5 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sAW5 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sAW6 = ligne.substr(0, pos);
+	pos = ligneEntree.find(separateurColonnes);
+	sAW6 = ligneEntree.substr(0, pos);
 	sAW6 =fTranscoderDebutLigne(sAW6, "'", "");
-	ligne.erase(0, pos + separateur.length());
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 
 	//chercher + charger + couper
-	pos = ligne.find(separateur);
-	sAW7 = ligne.substr(0, pos);
-	ligne.erase(0, pos + separateur.length());
+	pos = ligneEntree.find(separateurColonnes);
+	sAW7 = ligneEntree.substr(0, pos);
+	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 	cout << " -> fDecouperLigneCsv: "
 	<< "sN1:" << sN1
@@ -660,7 +662,7 @@ void fCsvVersVcf(void) {
   std::ofstream ficSortie (nomFicSortie);
 
   //std::ifstream ficEntree (nomFicEntree, std::ios::binary); (binary ne change pas le pb UTF8)
-  string ligne="";
+  string ligneEntree="";
 
   if  (!ficEntree){
       cout << "ERREUR: Impossible d'ouvrir ficEntree " << nomFicEntree<< endl;
@@ -672,11 +674,11 @@ void fCsvVersVcf(void) {
       return;
   }
 
-  getline(ficEntree, ligne); //ne pas traiter la ligne d'entete
+  getline(ficEntree, ligneEntree); //ne pas traiter la ligne d'entete
 
-  while(getline(ficEntree, ligne)) {
-	  if (ligne.length()>5) { // moins de 5 car <=> n'importe quoi dans la ligne!!
-		  fDecouperLigneCsv(ligne);
+  while(getline(ficEntree, ligneEntree)) {
+	  if (ligneEntree.length()>5) { // moins de 5 car <=> n'importe quoi dans la ligne!!
+		  fDecouperLigneCsv(ligneEntree);
 		  ficSortie	<< "BEGIN:VCARD"<< endl;
 		  ficSortie	<< "VERSION:2.1"<< endl;
 		  ficSortie	<< "N:" << sN1 << ";" << sN2 << ";;;"<< endl;
@@ -760,20 +762,20 @@ void fVcfVersCsv(void) {
 
 	  if  (ficEntree){
 	      cout << "d�but>>>>>>>>>>>>>>>>>>>" << endl;
-		  string ligne; //Une variable pour stocker les lignes lues
+		  string ligneEntree; //Une variable pour stocker les lignes lues
 		  int nLigne=0;
 		  //Tant qu'on n'est pas � la fin, on lit
-		  // while(getline(ficEntree, ligne, '\r'))
-		  while(getline(ficEntree, ligne)) {
+		  // while(getline(ficEntree, ligneEntree, '\r'))
+		  while(getline(ficEntree, ligneEntree)) {
 			  nLigne+=1;
-			  cout << "getligne " << nLigne << "=" << ligne<< endl;
-			  fDecouperLigneVcf(ligne);
+			  cout << "getligne " << nLigne << "=" << ligneEntree<< endl;
+			  fDecouperLigneVcf(ligneEntree);
 
 			  // en fin de card on ecrit
 			  // Majuscule
-			  for (auto & c: ligne) c = toupper(c);
+			  for (auto & c: ligneEntree) c = toupper(c);
 
-			  if (  ligne.compare("END:VCARD")==0   )
+			  if (  ligneEntree.compare("END:VCARD")==0   )
 			  {
 				ficSortie
 				<< sN1 << '\t'
@@ -894,7 +896,7 @@ string fChoixNomFic() {
 int main(void) {
 //============================================================================
     std::cout << "SALUT FRED (2024 12 12)"
-				<< std::endl;
+			  << std::endl;
 
     string sNomFic = "";
 
