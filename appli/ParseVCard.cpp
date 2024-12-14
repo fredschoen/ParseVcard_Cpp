@@ -70,7 +70,7 @@ string nom1="vcard";
 string nom2="test";
 string nom3="adr_col";
 
-string separAttributValeur = ":";
+string separateurAttributsValeurs = ":";
 string separateurElements = ";";
 
 
@@ -301,17 +301,27 @@ void fDecouperLigneVcf(string ligneEntree) {
 	ligneEntree =fTranscoderDebutLigne(ligneEntree, "NOTE;", "NOTE:");
 	ligneEntree =fTranscoderDebutLigne(ligneEntree, "TITLE;", "TITLE:");
 	ligneEntree =fTranscoderDebutLigne(ligneEntree, "N;", "N:");
+	ligneEntree =fTranscoderDebutLigne(ligneEntree, "FN;", "FN:");
+	ligneEntree =fTranscoderDebutLigne(ligneEntree, "ORG;", "ORG:");
 
-	// decoupage de la ligne: �l�ment 1
-	pos = ligneEntree.find(separAttributValeur);
+	//autres cas bizarre ?
+	std::size_t found =ligneEntree.find(separateurAttributsValeurs);
+	if(found==std::string::npos) {
+		cout << "---ATTENTION--- ligne sans ':' : " 
+		<<ligneEntree
+		<< endl;
+	}
+
+	// decoupage de la ligne: element 1
+	pos = ligneEntree.find(separateurAttributsValeurs);
 	tabAttribut = ligneEntree.substr(0, pos);
 
 	// Majuscules
 	for (auto & c: tabAttribut) c = toupper(c);
 
 	// effacer les attributs dans "ligneEntree"
-	ligneEntree.erase(0, pos + separAttributValeur.length());
-	// dernier element=le reste de la ligne: �l�ment 2
+	ligneEntree.erase(0, pos + separateurAttributsValeurs.length());
+	// dernier element=le reste de la ligne: element 2
 	tabValeur= fTranscoderTexte(ligneEntree);
 
 	//attribut de la ligne
