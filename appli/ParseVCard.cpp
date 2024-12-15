@@ -146,8 +146,10 @@ string fTranscoderTexte(string sTexte) {
 // ensuite les <> "=C3"
 
 	sRetour=fTranscoderToutesOccurrences(sRetour, "=20", " ");
+	sRetour=fTranscoderToutesOccurrences(sRetour, "=22", "\"");
 	sRetour=fTranscoderToutesOccurrences(sRetour, "=26", "&");
 	sRetour=fTranscoderToutesOccurrences(sRetour, "=28", "(");
+	sRetour=fTranscoderToutesOccurrences(sRetour, "=28", "'");
 	sRetour=fTranscoderToutesOccurrences(sRetour, "=29", ")");
 	sRetour=fTranscoderToutesOccurrences(sRetour, "=2E", ".");
 
@@ -298,13 +300,15 @@ void fDecouperLigneVcf(string ligneEntree) {
 	string valeur7="";
 
 	// cas bizarres
-	ligneEntree =fTranscoderDebutLigne(ligneEntree, "ADR;HOME;", "ADR;HOME:");
-	ligneEntree =fTranscoderDebutLigne(ligneEntree, "ADR;WORK;", "ADR;WORK:");
-	ligneEntree =fTranscoderDebutLigne(ligneEntree, "NOTE;", "NOTE:");
-	ligneEntree =fTranscoderDebutLigne(ligneEntree, "TITLE;", "TITLE:");
-	ligneEntree =fTranscoderDebutLigne(ligneEntree, "N;", "N:");
-	ligneEntree =fTranscoderDebutLigne(ligneEntree, "FN;", "FN:");
-	ligneEntree =fTranscoderDebutLigne(ligneEntree, "ORG;", "ORG:");
+
+	ligneEntree =fTranscoderDebutLigne(ligneEntree, ";CHARSET=UTF-8;ENCODING=QUOTED-PRINTABLE","");
+//	ligneEntree =fTranscoderDebutLigne(ligneEntree, "ADR;HOME;", "ADR;HOME:");
+//	ligneEntree =fTranscoderDebutLigne(ligneEntree, "ADR;WORK;", "ADR;WORK:");
+//	ligneEntree =fTranscoderDebutLigne(ligneEntree, "NOTE;", "NOTE:");
+//	ligneEntree =fTranscoderDebutLigne(ligneEntree, "TITLE;", "TITLE:");
+//	ligneEntree =fTranscoderDebutLigne(ligneEntree, "N;", "N:");
+//	ligneEntree =fTranscoderDebutLigne(ligneEntree, "FN;", "FN:");
+//	ligneEntree =fTranscoderDebutLigne(ligneEntree, "ORG;", "ORG:");
 
 	//autres cas bizarre ?
 	std::size_t found =ligneEntree.find(separateurAttributsValeurs);
