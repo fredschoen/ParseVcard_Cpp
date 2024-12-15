@@ -734,12 +734,21 @@ void fCsvVersTxt(void) {
 		return;
 	}
 	string ligneSortie;
+	string oldO1="";
 
-	getline(ficEntree, ligneEntree); //ne pas traiter la ligne d'entete
+	getline(ficEntree, ligneEntree); //ne pas traiter la ligne d'entete du classeur
 
 	while(getline(ficEntree, ligneEntree)) {
 		if (ligneEntree.length()>5) { // moins de 5 car <=> n'importe quoi dans la ligne!!
 			fDecouperLigneCsv(ligneEntree);
+
+			//ligne d'entete du ORG1
+			if(sO1!=oldO1) {
+				ligneSortie = "___________________________ " + sO1 + sO1 + sO1 + sO1 + sO1 + sO1 + sO1 + sO1 + sO1;
+				ficSortie << ligneSortie << endl;
+				oldO1=sO1;
+			}
+
 			ligneSortie="";
 			if(sN2.length()>0) ligneSortie += sN2 + " ";
 			if(sN3.length()>0) ligneSortie += sN3 + " ";
@@ -769,7 +778,7 @@ void fCsvVersTxt(void) {
 			if(sAW6.length()>0) ligneSortie += sAW6 + " ";
 			if(sAW7.length()>0) ligneSortie += sAW7 + " ";
 			ligneSortie += "/ ";
-			if(sO1.length()>0) ligneSortie += sO1 + " ";
+			//aaa bbb fff www: sera dans la ligne d'entete : if(sO1.length()>0) ligneSortie += sO1 + " ";
 			if(sO2.length()>0) ligneSortie += sO2 + " ";
 			if(sO3.length()>0) ligneSortie += sO3 + " ";
 			ligneSortie += "/ ";
@@ -781,6 +790,7 @@ void fCsvVersTxt(void) {
 			ligneSortie=fTranscoderToutesOccurrences(ligneSortie, " / /", " /");
 
 			ficSortie << ligneSortie << endl;
+			cout <<"ligneSortie=<" <<ligneSortie << ">" << endl;
 
 	  }
       cout << "fCsvVersVcf, nomFicEntree=" << nomFicEntree << " nomFicSortie=" << nomFicSortie << " : OK !!!!!!!!!" << endl;
