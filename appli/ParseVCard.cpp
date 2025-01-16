@@ -248,7 +248,7 @@ void fSeparerElements(string sousLigne) {
 	    numElement+=1;
 	    if (numElement==1) {
 		    sElement1 = sousLigne.substr(0, pos);
-		    sElement2 = sousLigne.substr(pos+ separateurElements.length(), sousLigne.length());
+				sElement2 = sousLigne.substr(pos+ separateurElements.length(), sousLigne.length());
 	    } else if (numElement==2) {
 		    sElement2 = sousLigne.substr(0, pos);
 		    sElement3 = sousLigne.substr(pos+ separateurElements.length(), sousLigne.length());
@@ -407,9 +407,9 @@ void fDecouperLigneVcf(string ligneEntree) {
 	//display
 	if (tabValeur.length()>0){
 		  cout << " -> fDecouperLigneVcf: "
-		  << "sN1:" << sN1
-		  << ";sN2:" 		  << sN2
+		  << " sN2:" 		  << sN2
 		  << ";sN3:" 		  << sN3
+		  << ";sN1:"          << sN1
 		  << ";sN4:" 		  << sN4
 		  << ";sTC:" 		  << sTC
 		  << ";sTH:" 		  << sTH
@@ -623,9 +623,9 @@ void fDecouperLigneCsv(string ligneEntree) {
 	ligneEntree.erase(0, pos + separateurColonnes.length());
 
 	cout << " -> fDecouperLigneCsv: "
-	<< "sN1:" << sN1
-	<< ";sN2:" 		  << sN2
+	<< " sN2:" 		  << sN2
 	<< ";sN3:" 		  << sN3
+	<< ";sN1:"        << sN1
 	<< ";sN4:" 		  << sN4
 	<< ";sTC:" 		  << sTC
 	<< ";sTH:" 		  << sTH
@@ -825,9 +825,9 @@ void fVcfVersCsv(void) {
 // traitement
   if  (ficSortie){
 	  ficSortie
-	  << "N1" << '\t'
 	  << "N2" << '\t'
 	  << "N3" << '\t'
+	  << "N1" << '\t'
 	  << "N4" << '\t'
 
 	  << "TEL_CELL"<< '\t'
@@ -880,9 +880,9 @@ void fVcfVersCsv(void) {
 			  if (  ligneEntree.compare("END:VCARD")==0   )
 			  {
 				ficSortie
-				<< sN1 << '\t'
 				<< sN2 << '\t'
 				<< sN3 << '\t'
+				<< sN1 << '\t'
 				<< sN4 << '\t'
 				<< prefixeColonneNum << sTC<< '\t'
 				<< prefixeColonneNum << sTH<< '\t'
