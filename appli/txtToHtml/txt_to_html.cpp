@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 #include <windows.h> // Pour SetConsoleOutputCP et SetConsoleCP
+#include <dirent.h> // Header file for directory operations
+#include <filesystem>
 
 using namespace std;
 
@@ -142,11 +144,32 @@ void transcodeToHTML(const std::string& inputFile, const std::string& outputFile
     std::cout << "Transcodage terminé : " << outputFile << " généré avec succès !" << std::endl;
 }
 
+
+int listDirTxt() {
+    namespace fs = std::filesystem;
+    fs::path txtDir = fs::current_path() / "txt";
+
+    if (fs::exists(txtDir) && fs::is_directory(txtDir)) {
+        for (const auto& entry : fs::directory_iterator(txtDir)) {
+            if (entry.is_regular_file() && entry.path().extension() == ".txt") {
+                std::cout << entry.path().filename().string() << std::endl;
+            }
+        }
+    } else {
+        std::cerr << "Directory 'txt' does not exist." << std::endl;
+    }
+
+
+    return 0;
+}
+
+
 int main() {
     // Forcer la console Windows à utiliser UTF-8
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
 
+	listDirTxt();
     std::string reponse, inputFile, outputFile;
 
     std::cout << "Entrez le nom du fichier .txt à transcoder en .html : ";
