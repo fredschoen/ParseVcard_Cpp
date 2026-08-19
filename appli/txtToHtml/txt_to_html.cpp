@@ -4,6 +4,26 @@
 #include <vector>
 #include <windows.h> // Pour SetConsoleOutputCP et SetConsoleCP
 
+using namespace std;
+
+//============================================================================
+string transcodeEscapeChar(string sTexte, string sCode, string sDecode) {
+// objectif: trouver la chaine "sCode" dans le texte "sTexte" et le remplacer par "sDecode"
+//============================================================================
+
+	//cout<<"transcodeEscapeChar, in  : " << sTexte << "," << sCode << "," << sDecode << "," << endl;
+	std::string sRetour=sTexte;
+	std::size_t found =sRetour.find(sCode);
+	while(found!=std::string::npos) {
+		sRetour.replace(found, sCode.length(), sDecode);
+		found =sRetour.find(sCode);
+	}
+	//cout<<"transcodeEscapeChar, out : " << sRetour << endl;
+return sRetour;
+}
+
+
+
 void transcodeToHTML(const std::string& inputFile, const std::string& outputFile) {
     std::ifstream inFile(inputFile);
     std::ofstream outFile(outputFile);
@@ -45,6 +65,50 @@ void transcodeToHTML(const std::string& inputFile, const std::string& outputFile
             continue; // Ignorer les lignes vides
         }
 
+		//line=transcodeTousLesEscapeCar(line);
+		
+		line=transcodeEscapeChar(line, "&", "&amp;"); //commencer par le & , sinon le reste est KO !!
+		line=transcodeEscapeChar(line, "'", "&apos;");
+		line=transcodeEscapeChar(line, "\"", "&quot;");
+
+		line=transcodeEscapeChar(line, "à", "&agrave;");
+		line=transcodeEscapeChar(line, "â", "&acirc;");
+		line=transcodeEscapeChar(line, "ä", "&auml;");
+		line=transcodeEscapeChar(line, "ç", "&ccedil;");
+		line=transcodeEscapeChar(line, "é", "&eacute;");
+		line=transcodeEscapeChar(line, "è", "&egrave;");
+		line=transcodeEscapeChar(line, "ê", "&ecirc;");
+		line=transcodeEscapeChar(line, "ë", "&euml;");
+		line=transcodeEscapeChar(line, "î", "&icirc;");
+		line=transcodeEscapeChar(line, "ï", "&iuml;");
+		line=transcodeEscapeChar(line, "ô", "&ocirc;");
+		line=transcodeEscapeChar(line, "ö", "&ouml;");
+		line=transcodeEscapeChar(line, "ù", "&ugrave;");
+		line=transcodeEscapeChar(line, "û", "&ucirc;");
+		line=transcodeEscapeChar(line, "ü", "&uuml;");
+		line=transcodeEscapeChar(line, "ÿ", "&yuml;");
+		line=transcodeEscapeChar(line, "À", "&Agrave;");
+		line=transcodeEscapeChar(line, "Â", "&Acirc;");
+		line=transcodeEscapeChar(line, "Ä", "&Auml;");
+		line=transcodeEscapeChar(line, "Ç", "&Ccedil;");
+		line=transcodeEscapeChar(line, "É", "&Eacute;");
+		line=transcodeEscapeChar(line, "È", "&Egrave;");
+		line=transcodeEscapeChar(line, "Ê", "&Ecirc;");
+		line=transcodeEscapeChar(line, "Ë", "&Euml;");
+		line=transcodeEscapeChar(line, "Î", "&Icirc;");
+		line=transcodeEscapeChar(line, "Ï", "&Iuml;");
+		line=transcodeEscapeChar(line, "Ô", "&Ocirc;");
+		line=transcodeEscapeChar(line, "Ö", "&Ouml;");
+		line=transcodeEscapeChar(line, "Ù", "&Ugrave;");
+		line=transcodeEscapeChar(line, "Û", "&Ucirc;");
+		line=transcodeEscapeChar(line, "Ü", "&Uuml;");
+		line=transcodeEscapeChar(line, "«", "&laquo;");
+		line=transcodeEscapeChar(line, "»", "&raquo;");
+		line=transcodeEscapeChar(line, "<", "&lt;");
+		line=transcodeEscapeChar(line, ">", "&gt;");
+
+	
+		
         if (line == "-") {
             outFile << "<hr>\n";
         } else if (firstLine) {
