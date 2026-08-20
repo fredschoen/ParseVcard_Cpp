@@ -26,17 +26,17 @@ return sRetour;
 
 
 
-void transcodeToHTML(const std::string& inputFile, const std::string& outputFile) {
-    std::ifstream inFile(inputFile);
-    std::ofstream outFile(outputFile);
+void transcodeToHTML(const std::string& inputFilePath, const std::string& outputFilePath) {
+    std::ifstream inFile(inputFilePath);
+    std::ofstream outFile(outputFilePath);
 
     if (!inFile.is_open()) {
-        std::cerr << "Erreur : Impossible d'ouvrir le fichier d'entrée : " << inputFile << std::endl;
+        std::cerr << "Erreur : Impossible d'ouvrir le fichier d'entrée : " << inputFilePath << std::endl;
         return;
     }
 
     if (!outFile.is_open()) {
-        std::cerr << "Erreur : Impossible de créer le fichier de sortie : " << outputFile << std::endl;
+        std::cerr << "Erreur : Impossible de créer le fichier de sortie : " << outputFilePath << std::endl;
         return;
     }
 
@@ -137,35 +137,93 @@ void transcodeToHTML(const std::string& inputFile, const std::string& outputFile
     }
 
     // Fin du document HTML
+    outFile << "          <table style=\"width: 100%; border-collapse: collapse; margin-bottom: 1em;\">\n";
+    outFile << "            <tr>\n";
+    outFile << "              <td style=\"width: 20%; text-align: center; padding: 0.5em; border: 1px solid #ccc;\">\n";
+    outFile << "                <a href=\"index.html\" style=\"display: inline-block;\">\n";
+    outFile << "                  <img src=\"left-arrow.svg\" alt=\"Retour\" style=\"width: 32px; height: 32px;\">\n";
+    outFile << "                </a>\n";
+    outFile << "              </td>\n";
+    outFile << "            </tr>\n";
+    outFile << "          </table>\n";
     outFile << "</body>\n</html>";
 
     inFile.close();
     outFile.close();
-    std::cout << "Transcodage terminé : " << outputFile << " généré avec succès !" << std::endl;
+    std::cout << "Transcodage terminé : " << outputFilePath << " généré avec succès !" << std::endl;
 }
 
 int trtDirTxt() {
     namespace fs = std::filesystem;
-    fs::path txtDir = fs::current_path() / "txt";
+    fs::path txtDirPath = fs::current_path() / "txt";
 
-    std::string inputFile, outputFile;
+    fs::path indexPath = fs::current_path() / "html" / "index.html";
+    std::ofstream indexFile(indexPath.string());
 
-    if (fs::exists(txtDir) && fs::is_directory(txtDir)) {
-        for (const auto& entry : fs::directory_iterator(txtDir)) {
+    if (!indexFile.is_open()) {
+        std::cerr << "Erreur : Impossible de créer le fichier index de sortie : " << indexPath.string() << std::endl;
+        return 0;
+    }
+
+    // Début du document index HTML avec le <head> personnalisé
+    indexFile << "<!DOCTYPE html>\n<html>\n<head>\n";
+    indexFile << "  <meta charset=\"UTF-8\" />\n";
+    indexFile << "  <title>index</title>\n";
+    indexFile << "  <style>\n";
+    indexFile << "    p {\n";
+    indexFile << "      margin: 0 0 0.7em 0;\n";
+    indexFile << "      line-height: 1.3;\n";
+    indexFile << "      font-family: Arial;\n";
+    indexFile << "      font-size: 24px;\n";
+    indexFile << "      text-indent: 0.5cm;\n";
+    indexFile << "    }\n";
+    indexFile << "    h1 {\n";
+    indexFile << "      margin: 0.1em 0 0.1em 0;\n";
+    indexFile << "      color: rgb(150, 0, 0);\n";
+    indexFile << "    }\n";
+    indexFile << "  </style>\n";
+    indexFile << "</head>\n<body>\n";
+
+    indexFile << "	<table style=\"width: 100%; border-collapse: collapse; margin-bottom: 1em;\">\n";
+    indexFile << "		<tr>\n";
+    indexFile << "		  <td style=\"width: 80%; text-align: center; padding: 0.5em; border: 1px solid #ccc;\">\n";
+    indexFile << "			<h1>index de x</h1>\n";
+    indexFile << "		  </td>\n";
+    indexFile << "		</tr>\n";
+    indexFile << "	</table>\n";
+    indexFile << "	<p>\n";
+
+
+
+    std::string inputFilePath, outputFilePath;
+	std::string pageRef, pageLib;
+
+    if (fs::exists(txtDirPath) && fs::is_directory(txtDirPath)) {
+        for (const auto& entry : fs::directory_iterator(txtDirPath)) {
             if (entry.is_regular_file() && entry.path().extension() == ".txt") {
                 //std::cout << entry.path().filename().string() << std::endl;
                 std::cout << entry.path().string() << std::endl;
 				
-				inputFile=entry.path().string();
-				outputFile=replaceString(entry.path().string(),".txt",".html");
-				outputFile=replaceString(outputFile,"\\txt\\","\\html\\");
+				inputFilePath=entry.path().string();
+				outputFilePath=replaceString(entry.path().string(),".txt",".html");
+				outputFilePath=replaceString(outputFilePath,"\\txt\\","\\html\\");
 				
-				transcodeToHTML(inputFile, outputFile);				
+				pageRef=replaceString(entry.path().filename().string(),".txt",".html");
+				pageLib=replaceString(entry.path().filename().string(),".txt","");
+				indexFile << "		<a href=\"" << pageRef << "\">" << pageLib << "</a><br>\n";
+
+				transcodeToHTML(inputFilePath, outputFilePath);				
             }
         }
     } else {
         std::cerr << "Directory 'txt' does not exist." << std::endl;
     }
+
+    // Fin du document index HTML
+    indexFile << "	</p>\n";
+    indexFile << "</body>\n</html>";
+    indexFile.close();
+    std::cout << "Transcodage terminé : " << indexPath.string() << " généré avec succès !" << std::endl;
 
     return 0;
 }
