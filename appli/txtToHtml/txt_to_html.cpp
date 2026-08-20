@@ -1,9 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <vector>
 #include <windows.h> // Pour SetConsoleOutputCP et SetConsoleCP
-#include <dirent.h> // Header file for directory operations
 #include <filesystem>
 
 using namespace std;
@@ -26,7 +24,7 @@ return sRetour;
 
 
 
-void transcodeToHTML(const std::string& inputFilePath, const std::string& outputFilePath) {
+void transcodeToHTML(const std::string& inputFilePath, const std::string& outputFilePath, const std::string& pageLib) {
     std::ifstream inFile(inputFilePath);
     std::ofstream outFile(outputFilePath);
 
@@ -46,7 +44,7 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
     // Début du document HTML avec le <head> personnalisé
     outFile << "<!DOCTYPE html>\n<html>\n<head>\n";
     outFile << "  <meta charset=\"UTF-8\" />\n";
-    outFile << "  <title>texte</title>\n";
+    outFile << "  <title>" << pageLib << "</title>\n";
     outFile << "  <style>\n";
     outFile << "    p {\n";
     outFile << "      margin: 0 0 0.7em 0;\n";
@@ -168,16 +166,15 @@ int trtDirTxt() {
     // Début du document index HTML avec le <head> personnalisé
     indexFile << "<!DOCTYPE html>\n<html>\n<head>\n";
     indexFile << "  <meta charset=\"UTF-8\" />\n";
-    indexFile << "  <title>index</title>\n";
+    indexFile << "  <title>Liste des textes</title>\n";
     indexFile << "  <style>\n";
     indexFile << "    p {\n";
-    indexFile << "      margin: 0 0 0.7em 0;\n";
-    indexFile << "      line-height: 1.3;\n";
-    indexFile << "      font-family: Arial;\n";
-    indexFile << "      font-size: 24px;\n";
-    indexFile << "      text-indent: 0.5cm;\n";
+    indexFile << "      margin: 0.25em 0.25em 0.25em 0.25em ;\n";
+    indexFile << "      font-size: 44px;\n";
+    indexFile << "      text-align: center;\n";
     indexFile << "    }\n";
     indexFile << "    h1 {\n";
+    indexFile << "      font-size: 33px;\n";
     indexFile << "      margin: 0.1em 0 0.1em 0;\n";
     indexFile << "      color: rgb(150, 0, 0);\n";
     indexFile << "    }\n";
@@ -187,11 +184,10 @@ int trtDirTxt() {
     indexFile << "	<table style=\"width: 100%; border-collapse: collapse; margin-bottom: 1em;\">\n";
     indexFile << "		<tr>\n";
     indexFile << "		  <td style=\"width: 80%; text-align: center; padding: 0.5em; border: 1px solid #ccc;\">\n";
-    indexFile << "			<h1>index de x</h1>\n";
+    indexFile << "			<h1>Liste des textes</h1>\n";
     indexFile << "		  </td>\n";
     indexFile << "		</tr>\n";
     indexFile << "	</table>\n";
-    indexFile << "	<p>\n";
 
 
 
@@ -210,9 +206,10 @@ int trtDirTxt() {
 				
 				pageRef=replaceString(entry.path().filename().string(),".txt",".html");
 				pageLib=replaceString(entry.path().filename().string(),".txt","");
+				indexFile << "	<p>\n";
 				indexFile << "		<a href=\"" << pageRef << "\">" << pageLib << "</a><br>\n";
-
-				transcodeToHTML(inputFilePath, outputFilePath);				
+				indexFile << "	</p>\n";
+				transcodeToHTML(inputFilePath, outputFilePath, pageLib);				
             }
         }
     } else {
@@ -220,7 +217,6 @@ int trtDirTxt() {
     }
 
     // Fin du document index HTML
-    indexFile << "	</p>\n";
     indexFile << "</body>\n</html>";
     indexFile.close();
     std::cout << "Transcodage terminé : " << indexPath.string() << " généré avec succès !" << std::endl;
