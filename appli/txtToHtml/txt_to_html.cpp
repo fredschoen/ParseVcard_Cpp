@@ -9,18 +9,18 @@
 using namespace std;
 
 //============================================================================
-string transcodeEscapeChar(string sTexte, string sCode, string sDecode) {
+string replaceString(string sTexte, string sCode, string sDecode) {
 // objectif: trouver la chaine "sCode" dans le texte "sTexte" et le remplacer par "sDecode"
 //============================================================================
 
-	//cout<<"transcodeEscapeChar, in  : " << sTexte << "," << sCode << "," << sDecode << "," << endl;
+	//cout<<"replaceString, in  : " << sTexte << "," << sCode << "," << sDecode << "," << endl;
 	std::string sRetour=sTexte;
 	std::size_t found =sRetour.find(sCode);
 	while(found!=std::string::npos) {
 		sRetour.replace(found, sCode.length(), sDecode);
 		found =sRetour.find(sCode);
 	}
-	//cout<<"transcodeEscapeChar, out : " << sRetour << endl;
+	//cout<<"replaceString, out : " << sRetour << endl;
 return sRetour;
 }
 
@@ -69,45 +69,45 @@ void transcodeToHTML(const std::string& inputFile, const std::string& outputFile
 
 		//line=transcodeTousLesEscapeCar(line);
 		
-		line=transcodeEscapeChar(line, "&", "&amp;"); //commencer par le & , sinon le reste est KO !!
-		line=transcodeEscapeChar(line, "'", "&apos;");
-		line=transcodeEscapeChar(line, "\"", "&quot;");
+		line=replaceString(line, "&", "&amp;"); //commencer par le & , sinon le reste est KO !!
+		line=replaceString(line, "'", "&apos;");
+		line=replaceString(line, "\"", "&quot;");
 
-		line=transcodeEscapeChar(line, "à", "&agrave;");
-		line=transcodeEscapeChar(line, "â", "&acirc;");
-		line=transcodeEscapeChar(line, "ä", "&auml;");
-		line=transcodeEscapeChar(line, "ç", "&ccedil;");
-		line=transcodeEscapeChar(line, "é", "&eacute;");
-		line=transcodeEscapeChar(line, "è", "&egrave;");
-		line=transcodeEscapeChar(line, "ê", "&ecirc;");
-		line=transcodeEscapeChar(line, "ë", "&euml;");
-		line=transcodeEscapeChar(line, "î", "&icirc;");
-		line=transcodeEscapeChar(line, "ï", "&iuml;");
-		line=transcodeEscapeChar(line, "ô", "&ocirc;");
-		line=transcodeEscapeChar(line, "ö", "&ouml;");
-		line=transcodeEscapeChar(line, "ù", "&ugrave;");
-		line=transcodeEscapeChar(line, "û", "&ucirc;");
-		line=transcodeEscapeChar(line, "ü", "&uuml;");
-		line=transcodeEscapeChar(line, "ÿ", "&yuml;");
-		line=transcodeEscapeChar(line, "À", "&Agrave;");
-		line=transcodeEscapeChar(line, "Â", "&Acirc;");
-		line=transcodeEscapeChar(line, "Ä", "&Auml;");
-		line=transcodeEscapeChar(line, "Ç", "&Ccedil;");
-		line=transcodeEscapeChar(line, "É", "&Eacute;");
-		line=transcodeEscapeChar(line, "È", "&Egrave;");
-		line=transcodeEscapeChar(line, "Ê", "&Ecirc;");
-		line=transcodeEscapeChar(line, "Ë", "&Euml;");
-		line=transcodeEscapeChar(line, "Î", "&Icirc;");
-		line=transcodeEscapeChar(line, "Ï", "&Iuml;");
-		line=transcodeEscapeChar(line, "Ô", "&Ocirc;");
-		line=transcodeEscapeChar(line, "Ö", "&Ouml;");
-		line=transcodeEscapeChar(line, "Ù", "&Ugrave;");
-		line=transcodeEscapeChar(line, "Û", "&Ucirc;");
-		line=transcodeEscapeChar(line, "Ü", "&Uuml;");
-		line=transcodeEscapeChar(line, "«", "&laquo;");
-		line=transcodeEscapeChar(line, "»", "&raquo;");
-		line=transcodeEscapeChar(line, "<", "&lt;");
-		line=transcodeEscapeChar(line, ">", "&gt;");
+		line=replaceString(line, "à", "&agrave;");
+		line=replaceString(line, "â", "&acirc;");
+		line=replaceString(line, "ä", "&auml;");
+		line=replaceString(line, "ç", "&ccedil;");
+		line=replaceString(line, "é", "&eacute;");
+		line=replaceString(line, "è", "&egrave;");
+		line=replaceString(line, "ê", "&ecirc;");
+		line=replaceString(line, "ë", "&euml;");
+		line=replaceString(line, "î", "&icirc;");
+		line=replaceString(line, "ï", "&iuml;");
+		line=replaceString(line, "ô", "&ocirc;");
+		line=replaceString(line, "ö", "&ouml;");
+		line=replaceString(line, "ù", "&ugrave;");
+		line=replaceString(line, "û", "&ucirc;");
+		line=replaceString(line, "ü", "&uuml;");
+		line=replaceString(line, "ÿ", "&yuml;");
+		line=replaceString(line, "À", "&Agrave;");
+		line=replaceString(line, "Â", "&Acirc;");
+		line=replaceString(line, "Ä", "&Auml;");
+		line=replaceString(line, "Ç", "&Ccedil;");
+		line=replaceString(line, "É", "&Eacute;");
+		line=replaceString(line, "È", "&Egrave;");
+		line=replaceString(line, "Ê", "&Ecirc;");
+		line=replaceString(line, "Ë", "&Euml;");
+		line=replaceString(line, "Î", "&Icirc;");
+		line=replaceString(line, "Ï", "&Iuml;");
+		line=replaceString(line, "Ô", "&Ocirc;");
+		line=replaceString(line, "Ö", "&Ouml;");
+		line=replaceString(line, "Ù", "&Ugrave;");
+		line=replaceString(line, "Û", "&Ucirc;");
+		line=replaceString(line, "Ü", "&Uuml;");
+		line=replaceString(line, "«", "&laquo;");
+		line=replaceString(line, "»", "&raquo;");
+		line=replaceString(line, "<", "&lt;");
+		line=replaceString(line, ">", "&gt;");
 
 	
 		
@@ -144,44 +144,38 @@ void transcodeToHTML(const std::string& inputFile, const std::string& outputFile
     std::cout << "Transcodage terminé : " << outputFile << " généré avec succès !" << std::endl;
 }
 
-
-int listDirTxt() {
+int trtDirTxt() {
     namespace fs = std::filesystem;
     fs::path txtDir = fs::current_path() / "txt";
+
+    std::string inputFile, outputFile;
 
     if (fs::exists(txtDir) && fs::is_directory(txtDir)) {
         for (const auto& entry : fs::directory_iterator(txtDir)) {
             if (entry.is_regular_file() && entry.path().extension() == ".txt") {
-                std::cout << entry.path().filename().string() << std::endl;
+                //std::cout << entry.path().filename().string() << std::endl;
+                std::cout << entry.path().string() << std::endl;
+				
+				inputFile=entry.path().string();
+				outputFile=replaceString(entry.path().string(),".txt",".html");
+				outputFile=replaceString(outputFile,"\\txt\\","\\html\\");
+				
+				transcodeToHTML(inputFile, outputFile);				
             }
         }
     } else {
         std::cerr << "Directory 'txt' does not exist." << std::endl;
     }
 
-
     return 0;
 }
-
 
 int main() {
     // Forcer la console Windows à utiliser UTF-8
     SetConsoleOutputCP(65001);
     SetConsoleCP(65001);
 
-	listDirTxt();
-    std::string reponse, inputFile, outputFile;
-
-    std::cout << "Entrez le nom du fichier .txt à transcoder en .html : ";
-    std::cin >> reponse;
-	// Si inputFile est vide, on retourne
-    if (reponse == "") {
-        return 0;
-    }
-	inputFile  = reponse + ".txt";
-	outputFile = reponse + ".html";
-
-    transcodeToHTML(inputFile, outputFile);
+	trtDirTxt();
 
     return 0;
 }
