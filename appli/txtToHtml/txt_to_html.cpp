@@ -16,7 +16,8 @@ string replaceString(string sTexte, string sCode, string sDecode) {
 	std::size_t found =sRetour.find(sCode);
 	while(found!=std::string::npos) {
 		sRetour.replace(found, sCode.length(), sDecode);
-		found =sRetour.find(sCode);
+		//found =sRetour.find(sCode);
+		found =sRetour.find(sCode, found + sDecode.length()); //pour eviter boucle infinie
 	}
 	//cout<<"replaceString, out : " << sRetour << endl;
 return sRetour;
