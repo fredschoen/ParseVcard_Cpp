@@ -6,6 +6,34 @@
 
 using namespace std;
 
+string convertQuotedUrlsToLinks(string sTexte) {
+    string sRetour;
+    size_t positionDebut = 0;
+    size_t crochetOuvrant = sTexte.find('[', positionDebut);
+
+    while (crochetOuvrant != string::npos) {
+        size_t separateur = sTexte.find(';', crochetOuvrant + 1);
+        size_t crochetFermant = sTexte.find(']', separateur + 1);
+
+        if (separateur == string::npos || crochetFermant == string::npos) {
+            break;
+        }
+
+        sRetour += sTexte.substr(positionDebut, crochetOuvrant - positionDebut);
+        sRetour += "--INF--a href=--QUOTE--";
+        sRetour += sTexte.substr(crochetOuvrant + 1, separateur - crochetOuvrant - 1);
+        sRetour += "--QUOTE-- target=--QUOTE--_blank--QUOTE----SUP--";
+        sRetour += sTexte.substr(separateur + 1, crochetFermant - separateur - 1);
+        sRetour += "--INF--/a--SUP--";
+
+        positionDebut = crochetFermant + 1;
+        crochetOuvrant = sTexte.find('[', positionDebut);
+    }
+
+    sRetour += sTexte.substr(positionDebut);
+    return sRetour;
+}
+
 //============================================================================
 string replaceString(string sTexte, string sCode, string sDecode) {
 // objectif: trouver la chaine "sCode" dans le texte "sTexte" et le remplacer par "sDecode"
@@ -16,7 +44,6 @@ string replaceString(string sTexte, string sCode, string sDecode) {
 	std::size_t found =sRetour.find(sCode);
 	while(found!=std::string::npos) {
 		sRetour.replace(found, sCode.length(), sDecode);
-		//found =sRetour.find(sCode);
 		found =sRetour.find(sCode, found + sDecode.length()); //pour eviter boucle infinie
 	}
 	//cout<<"replaceString, out : " << sRetour << endl;
@@ -66,9 +93,9 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
             continue; // Ignorer les lignes vides
         }
 
-		//line=transcodeTousLesEscapeCar(line);
-		
-		line=replaceString(line, "&", "&amp;"); //commencer par le & , sinon le reste est KO !!
+        line=convertQuotedUrlsToLinks(line);
+
+        line=replaceString(line, "&", "&amp;"); //commencer par le & , sinon le reste est KO !!
 		line=replaceString(line, "'", "&apos;");
 		line=replaceString(line, "\"", "&quot;");
 
@@ -108,8 +135,11 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
 		line=replaceString(line, "<", "&lt;");
 		line=replaceString(line, ">", "&gt;");
 
+        line=replaceString(line, "--INF--", "<");
+		line=replaceString(line, "--SUP--", ">");
+		line=replaceString(line, "--QUOTE--", "\"");
+
 	
-		
         if (line == "-") {
             outFile << "<hr>\n";
         } else if (firstLine) {
