@@ -88,6 +88,24 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
     outFile << "  </style>\n";
     outFile << "</head>\n<body>\n";
 
+
+
+	// Envelopper le <h1> dans la structure de tableau
+	outFile << "<table style=\"width: 100%; border-collapse: collapse; margin-bottom: 1em;\">\n";
+	outFile << "  <tr>\n";
+	outFile << "    <td style=\"width: 80%; text-align: center; padding: 0.5em; border: 1px solid #ccc;\">\n";
+	outFile << "      <h1>" << pageLib << "</h1>\n";
+	outFile << "    </td>\n";
+	outFile << "    <td style=\"width: 20%; text-align: center; padding: 0.5em; border: 1px solid #ccc;\">\n";
+	outFile << "      <a href=\"index.html\" style=\"display: inline-block;\">\n";
+	outFile << "        <img src=\"../left-arrow.svg\" alt=\"Retour\" style=\"width: 32px; height: 32px;\">\n";
+	outFile << "      </a>\n";
+	outFile << "    </td>\n";
+	outFile << "  </tr>\n";
+	outFile << "</table>\n";			
+
+
+
     while (std::getline(inFile, line)) {
         if (line.empty()) {
             continue; // Ignorer les lignes vides
@@ -142,23 +160,7 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
 	
         if (line == "-") {
             outFile << "<hr>\n";
-        } else if (firstLine) {
-
-
-            // Envelopper le <h1> dans la structure de tableau
-            outFile << "<table style=\"width: 100%; border-collapse: collapse; margin-bottom: 1em;\">\n";
-            outFile << "  <tr>\n";
-            outFile << "    <td style=\"width: 80%; text-align: center; padding: 0.5em; border: 1px solid #ccc;\">\n";
-            outFile << "      <h1>" << line << "</h1>\n";
-            outFile << "    </td>\n";
-            outFile << "    <td style=\"width: 20%; text-align: center; padding: 0.5em; border: 1px solid #ccc;\">\n";
-            outFile << "      <a href=\"index.html\" style=\"display: inline-block;\">\n";
-            outFile << "        <img src=\"left-arrow.svg\" alt=\"Retour\" style=\"width: 32px; height: 32px;\">\n";
-            outFile << "      </a>\n";
-            outFile << "    </td>\n";
-            outFile << "  </tr>\n";
-            outFile << "</table>\n";			
- 
+        } else if (firstLine) { 
             firstLine = false;
         } else {
             outFile << "<p>" << line << "</p>\n";
@@ -170,7 +172,7 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
     outFile << "            <tr>\n";
     outFile << "              <td style=\"width: 20%; text-align: center; padding: 0.5em; border: 1px solid #ccc;\">\n";
     outFile << "                <a href=\"index.html\" style=\"display: inline-block;\">\n";
-    outFile << "                  <img src=\"left-arrow.svg\" alt=\"Retour\" style=\"width: 32px; height: 32px;\">\n";
+    outFile << "                  <img src=\"../left-arrow.svg\" alt=\"Retour\" style=\"width: 32px; height: 32px;\">\n";
     outFile << "                </a>\n";
     outFile << "              </td>\n";
     outFile << "            </tr>\n";
@@ -223,7 +225,7 @@ int trtDirTxt() {
 
 
     std::string inputFilePath, outputFilePath;
-	std::string pageRef, pageLib;
+	std::string pageRef, pageLib, temp;
 
     if (fs::exists(txtDirPath) && fs::is_directory(txtDirPath)) {
         for (const auto& entry : fs::directory_iterator(txtDirPath)) {
@@ -234,9 +236,15 @@ int trtDirTxt() {
 				inputFilePath=entry.path().string();
 				outputFilePath=replaceString(entry.path().string(),".txt",".html");
 				outputFilePath=replaceString(outputFilePath,"\\txt\\","\\html\\");
-				
-				pageRef=replaceString(entry.path().filename().string(),".txt",".html");
 				pageLib=replaceString(entry.path().filename().string(),".txt","");
+				temp=replaceString(pageLib," ","_");
+
+				pageRef=replaceString(entry.path().filename().string(),".txt",".html");
+				pageRef=replaceString(pageRef," ","_");
+
+				outputFilePath=replaceString(outputFilePath,pageLib,temp);
+				pageLib=pageLib.substr(8, 99);
+
 				indexFile << "	<p>\n";
 				indexFile << "		<a href=\"" << pageRef << "\">" << pageLib << "</a><br>\n";
 				indexFile << "	</p>\n";
