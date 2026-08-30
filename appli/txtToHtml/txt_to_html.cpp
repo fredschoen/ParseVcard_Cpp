@@ -5,6 +5,34 @@
 #include <filesystem>
 
 using namespace std;
+namespace fs = std::filesystem;
+
+string bottom() {
+
+    string sRetour;
+    
+	// Construire le chemin du fichier
+    fs::path file_path = fs::current_path() / "zParam" / "bottom.txt";
+
+    // Ouvrir le fichier
+    std::ifstream file(file_path);
+
+    // Vérifier si le fichier est ouvert
+    if (!file.is_open()) {
+        std::cerr << "Erreur : Impossible d'ouvrir le fichier " << file_path << std::endl;
+        return sRetour;
+    }
+
+    // Lire et afficher le contenu ligne par ligne
+    std::string line;
+    while (std::getline(file, line)) {
+        sRetour += line;
+    }
+
+    // Fermer le fichier
+    file.close();
+    return sRetour;
+}
 
 string convertQuotedUrlsToLinks(string sTexte) {
     string sRetour;
@@ -162,6 +190,7 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
             outFile << "<hr>\n";
         } else if (firstLine) { 
             firstLine = false;
+            outFile << "<p>" << line << "</p>\n";
         } else {
             outFile << "<p>" << line << "</p>\n";
         }
@@ -185,7 +214,6 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
 }
 
 int trtDirTxt() {
-    namespace fs = std::filesystem;
     fs::path txtDirPath = fs::current_path() / "txt";
 
     fs::path indexPath = fs::current_path() / "html" / "index.html";
@@ -254,6 +282,10 @@ int trtDirTxt() {
     } else {
         std::cerr << "Directory 'txt' does not exist." << std::endl;
     }
+
+
+    // Fin du document index HTML, inclure eventuel bas de page
+	indexFile << bottom();
 
     // Fin du document index HTML
     indexFile << "</body>\n</html>";
