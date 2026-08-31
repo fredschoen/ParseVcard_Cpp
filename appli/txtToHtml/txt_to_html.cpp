@@ -101,19 +101,7 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
     outFile << "<!DOCTYPE html>\n<html>\n<head>\n";
     outFile << "  <meta charset=\"UTF-8\" />\n";
     outFile << "  <title>" << pageLib << "</title>\n";
-    outFile << "  <style>\n";
-    outFile << "    p {\n";
-    outFile << "      margin: 0 0 0.7em 0;\n";
-    outFile << "      line-height: 1.3;\n";
-    outFile << "      font-family: Arial;\n";
-    outFile << "      font-size: 24px;\n";
-    outFile << "      text-indent: 0.5cm;\n";
-    outFile << "    }\n";
-    outFile << "    h1 {\n";
-    outFile << "      margin: 0.1em 0 0.1em 0;\n";
-    outFile << "      color: rgb(150, 0, 0);\n";
-    outFile << "    }\n";
-    outFile << "  </style>\n";
+    outFile << "  <link href=\"../zParam/style.css\" rel=\"stylesheet\"\n";
     outFile << "</head>\n<body>\n";
 
 
