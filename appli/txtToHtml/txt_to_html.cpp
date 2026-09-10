@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <regex>
 #include <windows.h> // Pour SetConsoleOutputCP et SetConsoleCP
 #include <filesystem>
 
@@ -26,7 +27,7 @@ string bottom() {
     // Lire et afficher le contenu ligne par ligne
     std::string line;
     while (std::getline(file, line)) {
-        sRetour += line;
+        sRetour += line + "\n";
     }
 
     // Fermer le fichier
@@ -58,7 +59,7 @@ string convertQuotedUrlsToLinks(string sTexte) {
         crochetOuvrant = sTexte.find('[', positionDebut);
     }
 
-    sRetour += sTexte.substr(positionDebut);
+    sRetour += sTexte.substr(positionDebut)+"\n";
     return sRetour;
 }
 
@@ -95,13 +96,12 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
     }
 
     std::string line;
-    bool firstLine = true;
-
+	
     // Début du document HTML avec le <head> personnalisé
     outFile << "<!DOCTYPE html>\n<html>\n<head>\n";
     outFile << "  <meta charset=\"UTF-8\" />\n";
     outFile << "  <title>" << pageLib << "</title>\n";
-    outFile << "  <link href=\"../zParam/style.css\" rel=\"stylesheet\"\n";
+    outFile << "  <link href=\"style.css\" rel=\"stylesheet\"/>\n";
     outFile << "</head>\n<body>\n";
 
 
@@ -119,6 +119,7 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
 	outFile << "    </td>\n";
 	outFile << "  </tr>\n";
 	outFile << "</table>\n";			
+	outFile << "<br>\n";			
 
 
 
@@ -129,6 +130,7 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
 
         line=convertQuotedUrlsToLinks(line);
 
+        line=replaceString(line, ";", "."); //commencer par cette simplification perso, sinon le reste est KO !!
         line=replaceString(line, "&", "&amp;"); //commencer par le & , sinon le reste est KO !!
 		line=replaceString(line, "'", "&apos;");
 		line=replaceString(line, "\"", "&quot;");
@@ -174,12 +176,20 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
 		line=replaceString(line, "--QUOTE--", "\"");
 
 	
-        if (line == "-") {
+	
+	    // Remplacer tous les \r\n, \n, \r par un espace
+       std::regex newline_regex("\\r\\n|\\n|\\r");
+       std::string clearedLine = std::regex_replace(line, newline_regex, "");
+	
+	
+        if (clearedLine == "-") {
+			std::cout << "aaa clearedLine=\"" << clearedLine << "\"" << std::endl;
+			outFile << "<br>\n";			
             outFile << "<hr>\n";
-        } else if (firstLine) { 
-            firstLine = false;
-            outFile << "<p>" << line << "</p>\n";
+			outFile << "<br>\n";			
+
         } else {
+			std::cout << "b clearedLine=\"" << clearedLine << "\"" << std::endl;
             outFile << "<p>" << line << "</p>\n";
         }
     }
@@ -216,18 +226,7 @@ int trtDirTxt() {
     indexFile << "<!DOCTYPE html>\n<html>\n<head>\n";
     indexFile << "  <meta charset=\"UTF-8\" />\n";
     indexFile << "  <title>Liste des textes</title>\n";
-    indexFile << "  <style>\n";
-    indexFile << "    p {\n";
-    indexFile << "      margin: 0.25em 0.25em 0.25em 0.25em ;\n";
-    indexFile << "      font-size: 44px;\n";
-    indexFile << "      text-align: center;\n";
-    indexFile << "    }\n";
-    indexFile << "    h1 {\n";
-    indexFile << "      font-size: 33px;\n";
-    indexFile << "      margin: 0.1em 0 0.1em 0;\n";
-    indexFile << "      color: rgb(150, 0, 0);\n";
-    indexFile << "    }\n";
-    indexFile << "  </style>\n";
+    indexFile << "  <link href=\"style.css\" rel=\"stylesheet\"/>\n";
     indexFile << "</head>\n<body>\n";
 
     indexFile << "	<table style=\"width: 100%; border-collapse: collapse; margin-bottom: 1em;\">\n";
@@ -261,7 +260,7 @@ int trtDirTxt() {
 				outputFilePath=replaceString(outputFilePath,pageLib,temp);
 				pageLib=pageLib.substr(8, 99);
 
-				indexFile << "	<p>\n";
+				indexFile << "	<p class=\"index\">\n";
 				indexFile << "		<a href=\"" << pageRef << "\">" << pageLib << "</a><br>\n";
 				indexFile << "	</p>\n";
 				transcodeToHTML(inputFilePath, outputFilePath, pageLib);				

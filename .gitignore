@@ -7,3 +7,4 @@
 *.ods
 *.txt
 /appli/data
+appli/iterativeSave/iterativeSave.log
