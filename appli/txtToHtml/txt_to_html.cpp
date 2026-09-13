@@ -101,7 +101,7 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
     outFile << "<!DOCTYPE html>\n<html>\n<head>\n";
     outFile << "  <meta charset=\"UTF-8\" />\n";
     outFile << "  <title>" << pageLib << "</title>\n";
-    outFile << "  <link href=\"style.css\" rel=\"stylesheet\"/>\n";
+    outFile << "  <link href=\"data/style.css\" rel=\"stylesheet\"/>\n";
     outFile << "</head>\n<body>\n";
 
 
@@ -213,8 +213,23 @@ void transcodeToHTML(const std::string& inputFilePath, const std::string& output
 
 int trtDirTxt() {
     fs::path txtDirPath = fs::current_path() / "txt";
+    fs::path htmlDirPath = fs::current_path() / "html";
 
-    fs::path indexPath = fs::current_path() / "html" / "index.html";
+    if (fs::exists(htmlDirPath) && fs::is_directory(htmlDirPath)) {
+        for (const auto& entry : fs::directory_iterator(htmlDirPath)) {
+            if (entry.is_regular_file() && entry.path().extension() == ".html") {
+                std::error_code error;
+                fs::remove(entry.path(), error);
+                if (error) {
+                    std::cerr << "Erreur : Impossible de supprimer le fichier HTML : "
+                              << entry.path() << " (" << error.message() << ")" << std::endl;
+                    return 0;
+                }
+            }
+        }
+    }
+
+    fs::path indexPath = htmlDirPath / "index.html";
     std::ofstream indexFile(indexPath.string());
 
     if (!indexFile.is_open()) {
@@ -226,7 +241,7 @@ int trtDirTxt() {
     indexFile << "<!DOCTYPE html>\n<html>\n<head>\n";
     indexFile << "  <meta charset=\"UTF-8\" />\n";
     indexFile << "  <title>Liste des textes</title>\n";
-    indexFile << "  <link href=\"style.css\" rel=\"stylesheet\"/>\n";
+    indexFile << "  <link href=\"data/style.css\" rel=\"stylesheet\"/>\n";
     indexFile << "</head>\n<body>\n";
 
     indexFile << "	<table style=\"width: 100%; border-collapse: collapse; margin-bottom: 1em;\">\n";
